@@ -59,9 +59,9 @@ public class SpringSecurityConfig {
     public UserDetailsService userDetailsService() {
         return userDetailsService;
     }
-    /*
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }*/
+        return new BCryptPasswordEncoder(12);
+    }
 }
