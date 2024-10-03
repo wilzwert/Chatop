@@ -32,13 +32,9 @@ public class UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public JwtTokenDto register(@Valid @RequestBody final RegisterUserDto registerUserDto) {
-        User registerUser = new User();
-        registerUser.setEmail(registerUserDto.getEmail());
-        registerUser.setPassword(registerUserDto.getPassword());
-        registerUser.setName(registerUserDto.getName());
+        User registerUser = userMapper.registerUserDtoToUser(registerUserDto);
         registerUser.setCreatedAt(LocalDateTime.now());
         registerUser.setUpdatedAt(LocalDateTime.now());
-
         User user = userService.registerUser(registerUser);
         return new JwtTokenDto("jwt");
     }
