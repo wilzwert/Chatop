@@ -1,4 +1,10 @@
 package com.openclassrooms.chatop.service;
 
-public class UserService {
+import com.openclassrooms.chatop.model.User;
+
+import java.util.Optional;
+
+public interface UserService {
+    public Optional<User> findUserByEmail(final String email);
+    public Optional<User> findUserById(final long id);
 }
