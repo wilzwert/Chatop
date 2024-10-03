@@ -1,6 +1,7 @@
 package com.openclassrooms.chatop.mapper;
 
 import com.openclassrooms.chatop.dto.RentalDto;
+import com.openclassrooms.chatop.dto.RentalRequestDto;
 import com.openclassrooms.chatop.dto.UserDto;
 import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.model.User;
@@ -16,8 +17,8 @@ import java.time.format.DateTimeFormatter;
 public interface RentalMapper {
 
     RentalMapper INSTANCE = Mappers.getMapper(RentalMapper.class);
-    DateTimeFormatter DATE_FORMATTER_USER_TO_DTO = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    DateTimeFormatter DATE_FORMATTER_DTO_TO_USER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    //DateTimeFormatter DATE_FORMATTER_USER_TO_DTO = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    // DateTimeFormatter DATE_FORMATTER_DTO_TO_USER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
@@ -27,18 +28,20 @@ public interface RentalMapper {
     @Mapping(source = "description", target = "description")
     @Mapping(source = "ownerId", target = "ownerId")
     // Assuming createdAt and updatedAt are available in User entity or will be manually set in DTO
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
+    @Mapping(source = "createdAt", target = "createdAt", dateFormat = "yyyy/MM/dd")
+    @Mapping(source = "updatedAt", target = "updatedAt", dateFormat = "yyyy/MM/dd")
     RentalDto rentalToRentalDto(Rental rental);
 
     @InheritInverseConfiguration
-    Rental rentalDtoToRental(RentalDto rentalDto);
+    @Mapping(target = "picture", ignore = true)
+    Rental rentalRequestDtoToRental(RentalRequestDto rentalDto);
 
+    /*
     default String map(LocalDateTime dateTime) {
         return dateTime != null ? dateTime.format(DATE_FORMATTER_USER_TO_DTO) : null;
     }
 
     default LocalDateTime map(String dateTime) {
         return dateTime != null ? LocalDateTime.parse(dateTime, DATE_FORMATTER_DTO_TO_USER) : null;
-    }
+    }*/
 }
