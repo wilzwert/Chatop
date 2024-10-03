@@ -1,4 +1,4 @@
 package com.openclassrooms.chatop.service;
 
-public class MessageService {
+public interface MessageService {
 }
