@@ -69,7 +69,6 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public UserDto getUser(@PathVariable long id) {
         Optional<User> foundUser = userService.findUserById(id);
         if(foundUser.isEmpty()) {
