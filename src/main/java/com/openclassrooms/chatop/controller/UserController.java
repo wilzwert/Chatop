@@ -1,6 +1,7 @@
 package com.openclassrooms.chatop.controller;
 
 import com.openclassrooms.chatop.dto.JwtTokenDto;
+import com.openclassrooms.chatop.dto.LoginRequestDto;
 import com.openclassrooms.chatop.dto.RegisterUserDto;
 import com.openclassrooms.chatop.dto.UserDto;
 import com.openclassrooms.chatop.mapper.UserMapper;
@@ -11,6 +12,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,15 +48,25 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public String login() {
-        return "TODO : login";
+    public JwtTokenDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        try {
+            User user = userService.authenticateUser(loginRequestDto.getLogin(), loginRequestDto.getPassword());
+            String token = userService.generateToken(user);
+            return new JwtTokenDto(token);
+        }
+        catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login failed.");
+        }
     }
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public String getUserInfo(Principal principal) {
-        return "TODO";
+    public UserDto getUserInfo(Principal principal) {
+        Optional<User> foundUser = userService.findUserByEmail(principal.getName());
+        if(foundUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return userMapper.userToUserDTO(foundUser.get());
     }
 
     @GetMapping("/user/{id}")
