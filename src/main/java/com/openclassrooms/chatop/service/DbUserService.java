@@ -2,6 +2,7 @@ package com.openclassrooms.chatop.service;
 
 import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.repository.UserRepository;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,10 @@ public class DbUserService implements UserService {
 
     @Override
     public User registerUser(User user) {
-        System.out.println(encodePassword(user.getPassword()));
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+        if(existingUser.isPresent()) {
+            throw new EntityExistsException("A user already registered with this email");
+        }
         user.setPassword(encodePassword(user.getPassword()));
         return userRepository.save(user);
     }

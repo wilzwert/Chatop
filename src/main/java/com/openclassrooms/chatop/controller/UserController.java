@@ -7,6 +7,7 @@ import com.openclassrooms.chatop.mapper.UserMapper;
 import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.repository.UserRepository;
 import com.openclassrooms.chatop.service.UserService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,12 @@ public class UserController {
         User registerUser = userMapper.registerUserDtoToUser(registerUserDto);
         registerUser.setCreatedAt(LocalDateTime.now());
         registerUser.setUpdatedAt(LocalDateTime.now());
-        User user = userService.registerUser(registerUser);
+        try {
+            User user = userService.registerUser(registerUser);
+        }
+        catch (EntityExistsException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        }
         return new JwtTokenDto("jwt");
     }
 
