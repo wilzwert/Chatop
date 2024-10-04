@@ -1,4 +1,7 @@
 package com.openclassrooms.chatop.service;
 
-public class MessageService {
+import com.openclassrooms.chatop.model.Message;
+
+public interface MessageService {
+    public Message createMessage(Message message);
 }
