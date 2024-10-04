@@ -26,12 +26,6 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    // TODO
-    public String extractUsername(String token) {
-        return "w";
-    }
-
-    // TODO
     public Optional<JwtToken> extractTokenFromRequest(HttpServletRequest request) throws ExpiredJwtException, MalformedJwtException, SignatureException, SecurityException, IllegalArgumentException {
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -40,21 +34,11 @@ public class JwtService {
         final String token = authHeader.substring(7);
 
         Jwt<?, ?> parsedToken = Jwts
-                .parser().verifyWith((SecretKey) getSignInKey()).build().parse(token);
+                .parser().verifyWith(getSignInKey()).build().parse(token);
         Claims claims = (Claims) parsedToken.getPayload();
 
         JwtToken jwtToken = new JwtToken(claims.getSubject(), claims);
         return Optional.of(jwtToken);
-    }
-
-    // TODO
-    public boolean isTokenExpired(String token) {
-        return false;
-    }
-
-    // TODO
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        return false;
     }
 
     public String generateToken(User user) {
@@ -67,7 +51,7 @@ public class JwtService {
                 .compact();
     }
 
-    private Key getSignInKey() {
+    private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
