@@ -61,7 +61,7 @@ public class RentalController {
             Rental rental = rentalService.createRental(createRental);
         }
         catch(Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Rental coud not be created");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Rental could not be created");
         }
 
         return new RentalResponseDto("Rental created !");
