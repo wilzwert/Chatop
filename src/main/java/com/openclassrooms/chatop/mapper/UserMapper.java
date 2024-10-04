@@ -15,8 +15,6 @@ import java.time.format.DateTimeFormatter;
 public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-    // DateTimeFormatter DATE_FORMATTER_USER_TO_DTO = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    // DateTimeFormatter DATE_FORMATTER_DTO_TO_USER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
