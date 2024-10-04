@@ -60,7 +60,6 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public UserDto getUserInfo(Principal principal) {
         Optional<User> foundUser = userService.findUserByEmail(principal.getName());
         if(foundUser.isEmpty()) {
