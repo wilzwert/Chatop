@@ -4,7 +4,11 @@ import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,11 +17,20 @@ import java.util.Optional;
 public class DbUserService implements UserService {
 
     private final UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
+    private JwtService jwtService;
 
-    public DbUserService(@Autowired final UserRepository userRepository, @Autowired BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public DbUserService(
+            @Autowired final UserRepository userRepository,
+            @Autowired PasswordEncoder passwordEncoder,
+            @Autowired AuthenticationManager authenticationManager,
+            @Autowired JwtService jwtService
+    ) {
         this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -28,6 +41,28 @@ public class DbUserService implements UserService {
         }
         user.setPassword(encodePassword(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public String generateToken(User user) {
+        return jwtService.generateToken(user);
+    }
+
+    @Override
+    public User authenticateUser(String email, String password) throws AuthenticationException {
+        Optional<User> user = findUserByEmail(email);
+        if(user.isEmpty()) {
+            throw new AuthenticationException("User not found") {
+                @Override
+                public String getMessage() {
+                    return super.getMessage();
+                }
+            };
+        }
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(email, password)
+        );
+        return user.get();
     }
 
     @Override
@@ -42,6 +77,6 @@ public class DbUserService implements UserService {
 
     @Override
     public String encodePassword(String password) {
-        return bCryptPasswordEncoder.encode(password);
+        return passwordEncoder.encode(password);
     }
 }
