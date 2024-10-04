@@ -34,7 +34,7 @@ public interface RentalMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "picture", ignore = true)
-    Rental rentalRequestDtoToRental(RentalRequestDto rentalDto);
+    Rental rentalRequestDtoToRental(RentalRequestDto rentalRequestDto);
 
     /*
     default String map(LocalDateTime dateTime) {
