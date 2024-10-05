@@ -3,6 +3,7 @@ package com.openclassrooms.chatop.mapper;
 import com.openclassrooms.chatop.dto.CreateRentalRequestDto;
 import com.openclassrooms.chatop.dto.RentalActionRequestDto;
 import com.openclassrooms.chatop.dto.RentalDto;
+import com.openclassrooms.chatop.dto.UpdateRentalRequestDto;
 import com.openclassrooms.chatop.model.Rental;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -28,16 +29,12 @@ public interface RentalMapper {
     @Mapping(source = "updatedAt", target = "updatedAt", dateFormat = "yyyy/MM/dd")
     RentalDto rentalToRentalDto(Rental rental);
 
+    // picture field gets handled in service with file uploading
     @InheritInverseConfiguration
     @Mapping(target = "picture", ignore = true)
-    Rental rentalRequestDtoToRental(RentalActionRequestDto createRentalRequestDto);
+    Rental rentalRequestDtoToRental(UpdateRentalRequestDto updateRentalRequestDto);
 
-    /*
-    default String map(LocalDateTime dateTime) {
-        return dateTime != null ? dateTime.format(DATE_FORMATTER_USER_TO_DTO) : null;
-    }
-
-    default LocalDateTime map(String dateTime) {
-        return dateTime != null ? LocalDateTime.parse(dateTime, DATE_FORMATTER_DTO_TO_USER) : null;
-    }*/
+    @InheritInverseConfiguration
+    @Mapping(target = "picture", ignore = true)
+    Rental rentalRequestDtoToRental(CreateRentalRequestDto createRentalRequestDto);
 }

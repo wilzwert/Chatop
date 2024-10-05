@@ -57,4 +57,13 @@ public class GlobalExceptionHandler {
         errorDTO.setTime(new Date().toString());
         return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.PAYLOAD_TOO_LARGE);
     }
+    /*
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity<ErrorDTO> generateStorageFileNotFoundException(StorageFileNotFoundException ex) {
+        ErrorDTO errorDTO = new ErrorDTO();
+        errorDTO.setStatus(String.valueOf(HttpStatus.NOT_FOUND.value()));
+        errorDTO.setMessage("File not found");
+        errorDTO.setTime(new Date().toString());
+        return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.NOT_FOUND);
+    }*/
 }

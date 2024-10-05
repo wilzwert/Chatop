@@ -39,7 +39,7 @@ public class RentalController {
     public RentalsDto getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
         List<RentalDto> rentalDtos = new ArrayList<RentalDto>();
-        rentals.stream().map(rental -> rentalMapper.rentalToRentalDto(rental)).forEach(rentalDtos::add);
+        rentals.stream().map(rentalMapper::rentalToRentalDto).forEach(rentalDtos::add);
         return new RentalsDto(rentalDtos);
     }
 
@@ -77,9 +77,10 @@ public class RentalController {
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
             Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);
+            System.out.println(updateRental);
             updateRental.setId(id);
-            rentalService.updateRental(updateRental);
-            return new RentalResponseDto("Rental updated !");
+            Rental updatedRental = rentalService.updateRental(updateRental, updateRentalDto.getPicture());
+            return new RentalResponseDto("Rental "+updatedRental.getName()+" updated !");
         }
         catch(EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found");
