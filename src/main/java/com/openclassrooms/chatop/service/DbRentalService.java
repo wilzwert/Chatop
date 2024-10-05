@@ -51,8 +51,14 @@ public class DbRentalService implements RentalService {
         rental.setOwnerId(existingRental.get().getOwnerId());
         rental.setUpdatedAt(LocalDateTime.now());
 
-        if(multipartFile != null) {
+        if(multipartFile != null && !multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
+            // get previous picture so that we can delete it if picture is updated
+            String previousPicture = existingRental.get().getPicture();
+            System.out.println(previousPicture);
             rental.setPicture(storePicture(multipartFile));
+            if(!previousPicture.isBlank()) {
+                fileService.deleteFileFromUrl(previousPicture);
+            }
         }
 
         return rentalRepository.save(rental);

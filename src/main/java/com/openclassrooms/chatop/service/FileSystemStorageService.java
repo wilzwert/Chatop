@@ -1,5 +1,6 @@
 package com.openclassrooms.chatop.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -55,6 +57,12 @@ public class FileSystemStorageService implements StorageService {
         catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
+    }
+
+    @Override
+    public void delete(String filename) {
+        File file = rootLocation.resolve(filename).toFile();
+        file.delete();
     }
 
     @Override

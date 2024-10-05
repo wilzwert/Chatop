@@ -10,10 +10,12 @@ public class UploadedFileService implements FileService {
 
     private final ServerProperties serverProperties;
     private final StorageProperties storageProperties;
+    private StorageService storageService;
 
-    public UploadedFileService(ServerProperties serverProperties, StorageProperties storageProperties) {
+    public UploadedFileService(ServerProperties serverProperties, StorageProperties storageProperties, StorageService storageService) {
         this.serverProperties = serverProperties;
         this.storageProperties = storageProperties;
+        this.storageService = storageService;
 
     }
 
@@ -39,5 +41,12 @@ public class UploadedFileService implements FileService {
             +storageProperties.getUploadDir()
             +"/"
             +fileName;
+    }
+
+    @Override
+    public void deleteFileFromUrl(String fileUrl) {
+        // get original filename
+        String originalFilename = fileUrl.substring(fileUrl.lastIndexOf("/")+1);
+        storageService.delete(originalFilename);
     }
 }
