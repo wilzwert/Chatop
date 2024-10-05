@@ -53,7 +53,7 @@ public class DbRentalService implements RentalService {
             // get previous picture so that we can delete it if picture is updated
             String previousPicture = existingRental.get().getPicture();
             rental.setPicture(storePicture(multipartFile));
-            if(!previousPicture.isBlank()) {
+            if(previousPicture != null && !previousPicture.isBlank()) {
                 fileService.deleteFileFromUrl(previousPicture);
             }
         }
