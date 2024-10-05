@@ -35,14 +35,19 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public String store(MultipartFile file) {
         try {
             if (file.isEmpty() || file.getOriginalFilename() == null) {
                 throw new StorageException("Failed to store empty file.");
             }
 
+            // generate unique file name to avoid uploads collisions
+            String uniqueFileName = java.util.UUID.randomUUID().toString()
+                    +"."
+                    + file.getOriginalFilename().split("\\.")[1];;
+
             Path destinationFile = this.rootLocation.resolve(
-                            Paths.get(file.getOriginalFilename()))
+                            Paths.get(uniqueFileName))
                     .normalize().toAbsolutePath();
             if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
                 // This is a security check
@@ -53,6 +58,8 @@ public class FileSystemStorageService implements StorageService {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
             }
+
+            return uniqueFileName;
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
@@ -61,8 +68,12 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void delete(String filename) {
-        File file = rootLocation.resolve(filename).toFile();
-        file.delete();
+        Resource resource = loadAsResource(filename);
+        try {
+            boolean result = resource.getFile().delete();
+        } catch (IOException e) {
+            throw new StorageFileNotFoundException("Cannot get file for deletion", e);
+        }
     }
 
     @Override
@@ -93,7 +104,6 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void init() {
         try {
-            System.out.println(rootLocation.toAbsolutePath());
             Files.createDirectories(rootLocation);
         }
         catch (IOException e) {

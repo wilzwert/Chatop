@@ -21,7 +21,6 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        System.out.println("addResourceHandlers"+"/"+storageProperties.getUploadDir()+"/**"+" -- "+"file:" + System.getProperty("user.dir") + "/"+storageProperties.getUploadDir()+"/");
         registry.addResourceHandler("/"+storageProperties.getUploadDir()+"/**")
                 .addResourceLocations("file:" + System.getProperty("user.dir") + "/"+storageProperties.getUploadDir()+"/");
     }

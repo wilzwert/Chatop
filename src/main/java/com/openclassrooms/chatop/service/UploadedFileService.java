@@ -10,7 +10,7 @@ public class UploadedFileService implements FileService {
 
     private final ServerProperties serverProperties;
     private final StorageProperties storageProperties;
-    private StorageService storageService;
+    private final StorageService storageService;
 
     public UploadedFileService(ServerProperties serverProperties, StorageProperties storageProperties, StorageService storageService) {
         this.serverProperties = serverProperties;
@@ -29,18 +29,6 @@ public class UploadedFileService implements FileService {
             +storageProperties.getUploadDir()
             +"/"
             +resource.getFilename();
-    }
-
-    @Override
-    public String generateUrl(String fileName) {
-        return
-            serverProperties.getProtocol()+"://"
-            +serverProperties.getHostname()+":"
-            +serverProperties.getPort()
-            +"/"
-            +storageProperties.getUploadDir()
-            +"/"
-            +fileName;
     }
 
     @Override
