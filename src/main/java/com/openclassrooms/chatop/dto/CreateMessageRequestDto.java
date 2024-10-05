@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class MessageRequestDto {
+public class CreateMessageRequestDto {
     @NotNull
     @JsonProperty("rental_id")
     private int rentalId;
