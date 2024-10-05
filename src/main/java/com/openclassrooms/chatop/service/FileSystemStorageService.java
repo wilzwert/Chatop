@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -42,9 +40,9 @@ public class FileSystemStorageService implements StorageService {
             }
 
             // generate unique file name to avoid uploads collisions
-            String uniqueFileName = java.util.UUID.randomUUID().toString()
+            String uniqueFileName = java.util.UUID.randomUUID()
                     +"."
-                    + file.getOriginalFilename().split("\\.")[1];;
+                    + file.getOriginalFilename().split("\\.")[1];
 
             Path destinationFile = this.rootLocation.resolve(
                             Paths.get(uniqueFileName))
@@ -71,6 +69,9 @@ public class FileSystemStorageService implements StorageService {
         Resource resource = loadAsResource(filename);
         try {
             boolean result = resource.getFile().delete();
+            if(!result){
+                throw new StorageFileNotFoundException("Cannot get file for deletion");
+            }
         } catch (IOException e) {
             throw new StorageFileNotFoundException("Cannot get file for deletion", e);
         }
