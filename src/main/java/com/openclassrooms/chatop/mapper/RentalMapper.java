@@ -1,17 +1,13 @@
 package com.openclassrooms.chatop.mapper;
 
+import com.openclassrooms.chatop.dto.CreateRentalRequestDto;
+import com.openclassrooms.chatop.dto.RentalActionRequestDto;
 import com.openclassrooms.chatop.dto.RentalDto;
-import com.openclassrooms.chatop.dto.RentalRequestDto;
-import com.openclassrooms.chatop.dto.UserDto;
 import com.openclassrooms.chatop.model.Rental;
-import com.openclassrooms.chatop.model.User;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Mapper
 public interface RentalMapper {
@@ -34,7 +30,7 @@ public interface RentalMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "picture", ignore = true)
-    Rental rentalRequestDtoToRental(RentalRequestDto rentalRequestDto);
+    Rental rentalRequestDtoToRental(RentalActionRequestDto createRentalRequestDto);
 
     /*
     default String map(LocalDateTime dateTime) {

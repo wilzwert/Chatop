@@ -1,12 +1,11 @@
 package com.openclassrooms.chatop.controller;
 
-import com.openclassrooms.chatop.dto.RentalRequestDto;
-import com.openclassrooms.chatop.dto.RentalDto;
-import com.openclassrooms.chatop.dto.RentalResponseDto;
-import com.openclassrooms.chatop.dto.RentalsDto;
+import com.openclassrooms.chatop.dto.*;
 import com.openclassrooms.chatop.mapper.RentalMapper;
 import com.openclassrooms.chatop.model.Rental;
+import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.service.RentalService;
+import com.openclassrooms.chatop.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +26,13 @@ public class RentalController {
 
     private final RentalService rentalService;
 
+    private final UserService userService;
+
     private final RentalMapper rentalMapper = RentalMapper.INSTANCE;
 
-    public RentalController(@Autowired RentalService rentalService) {
+    public RentalController(@Autowired RentalService rentalService, @Autowired UserService userService) {
         this.rentalService = rentalService;
+        this.userService = userService;
     }
 
     @GetMapping("")
@@ -50,15 +53,18 @@ public class RentalController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public RentalResponseDto createRental(@Valid @ModelAttribute RentalRequestDto createRentalDto) {
+    public RentalResponseDto createRental(@Valid @ModelAttribute CreateRentalRequestDto createRentalDto, Principal principal) {
         try {
             Rental createRental = rentalMapper.rentalRequestDtoToRental(createRentalDto);
-            // TODO : extract owner id from current token / authentication
-            createRental.setOwnerId(1);
+            Optional<User> foundUser = userService.findUserByEmail(principal.getName());
+            if(foundUser.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
+            }
+            createRental.setOwnerId(foundUser.get().getId());
             // TODO handle image file upload
             createRental.setCreatedAt(LocalDateTime.now());
             createRental.setUpdatedAt(LocalDateTime.now());
-            Rental rental = rentalService.createRental(createRental);
+            Rental rental = rentalService.createRental(createRental, createRentalDto.getPicture());
         }
         catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Rental could not be created");
@@ -68,9 +74,9 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public RentalResponseDto updateRental(@PathVariable int id, @Valid RentalRequestDto createRentalDto) {
+    public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
-            Rental updateRental = rentalMapper.rentalRequestDtoToRental(createRentalDto);
+            Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);
             updateRental.setId(id);
             rentalService.updateRental(updateRental);
             return new RentalResponseDto("Rental updated !");
