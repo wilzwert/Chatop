@@ -5,16 +5,15 @@ import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
+
 public class ImageFileValidator implements ConstraintValidator<ImageFile, MultipartFile> {
     @Override
     public boolean isValid(MultipartFile f, ConstraintValidatorContext constraintValidatorContext) {
         boolean valid = true;
 
         if(f != null && !f.isEmpty()) {
-            if (!isSupportedContentType(f.getContentType())) {
-                constraintValidatorContext.disableDefaultConstraintViolation();
-                constraintValidatorContext.buildConstraintViolationWithTemplate("Image must be png, gif or jpg")
-                        .addConstraintViolation();
+            if (Objects.requireNonNull(f.getContentType()).isEmpty() || !isSupportedContentType(f.getContentType())) {
                 valid = false;
             }
         }
@@ -22,7 +21,7 @@ public class ImageFileValidator implements ConstraintValidator<ImageFile, Multip
         return valid;
     }
 
-    private boolean isSupportedContentType(String contentType) {
+    public boolean isSupportedContentType(String contentType) {
         return contentType.equals("image/png")
                 || contentType.equals("image/jpg")
                 || contentType.equals("image/jpeg")
