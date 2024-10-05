@@ -1,9 +1,7 @@
 package com.openclassrooms.chatop.controller;
 
-import com.openclassrooms.chatop.dto.MessageDto;
-import com.openclassrooms.chatop.dto.MessageRequestDto;
+import com.openclassrooms.chatop.dto.CreateMessageRequestDto;
 import com.openclassrooms.chatop.dto.MessageResponseDto;
-import com.openclassrooms.chatop.dto.RentalResponseDto;
 import com.openclassrooms.chatop.mapper.MessageMapper;
 import com.openclassrooms.chatop.model.Message;
 import com.openclassrooms.chatop.service.MessageService;
@@ -28,9 +26,9 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public MessageResponseDto createMessage(@Valid @RequestBody MessageRequestDto messageRequestDto) {
+    public MessageResponseDto createMessage(@Valid @RequestBody CreateMessageRequestDto createMessageRequestDto) {
         try {
-            Message createMessage = messageMapper.messageRequestDtoToMessage(messageRequestDto);
+            Message createMessage = messageMapper.messageRequestDtoToMessage(createMessageRequestDto);
             LocalDateTime now = LocalDateTime.now();
             createMessage.setCreatedAt(now);
             createMessage.setUpdatedAt(now);

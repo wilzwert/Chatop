@@ -1,11 +1,8 @@
 package com.openclassrooms.chatop.mapper;
 
 import com.openclassrooms.chatop.dto.MessageDto;
-import com.openclassrooms.chatop.dto.MessageRequestDto;
-import com.openclassrooms.chatop.dto.RentalDto;
-import com.openclassrooms.chatop.dto.RentalRequestDto;
+import com.openclassrooms.chatop.dto.CreateMessageRequestDto;
 import com.openclassrooms.chatop.model.Message;
-import com.openclassrooms.chatop.model.Rental;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,5 +24,5 @@ public interface MessageMapper {
     MessageDto messageToMessageDto(Message message);
 
     @InheritInverseConfiguration
-    Message messageRequestDtoToMessage(MessageRequestDto messageRequestDto);
+    Message messageRequestDtoToMessage(CreateMessageRequestDto createMessageRequestDto);
 }

@@ -1,17 +1,14 @@
 package com.openclassrooms.chatop.mapper;
 
+import com.openclassrooms.chatop.dto.CreateRentalRequestDto;
+import com.openclassrooms.chatop.dto.RentalActionRequestDto;
 import com.openclassrooms.chatop.dto.RentalDto;
-import com.openclassrooms.chatop.dto.RentalRequestDto;
-import com.openclassrooms.chatop.dto.UserDto;
+import com.openclassrooms.chatop.dto.UpdateRentalRequestDto;
 import com.openclassrooms.chatop.model.Rental;
-import com.openclassrooms.chatop.model.User;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Mapper
 public interface RentalMapper {
@@ -32,16 +29,12 @@ public interface RentalMapper {
     @Mapping(source = "updatedAt", target = "updatedAt", dateFormat = "yyyy/MM/dd")
     RentalDto rentalToRentalDto(Rental rental);
 
+    // picture field gets handled in service with file uploading
     @InheritInverseConfiguration
     @Mapping(target = "picture", ignore = true)
-    Rental rentalRequestDtoToRental(RentalRequestDto rentalRequestDto);
+    Rental rentalRequestDtoToRental(UpdateRentalRequestDto updateRentalRequestDto);
 
-    /*
-    default String map(LocalDateTime dateTime) {
-        return dateTime != null ? dateTime.format(DATE_FORMATTER_USER_TO_DTO) : null;
-    }
-
-    default LocalDateTime map(String dateTime) {
-        return dateTime != null ? LocalDateTime.parse(dateTime, DATE_FORMATTER_DTO_TO_USER) : null;
-    }*/
+    @InheritInverseConfiguration
+    @Mapping(target = "picture", ignore = true)
+    Rental rentalRequestDtoToRental(CreateRentalRequestDto createRentalRequestDto);
 }
