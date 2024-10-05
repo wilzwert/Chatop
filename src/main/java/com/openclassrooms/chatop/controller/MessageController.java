@@ -5,6 +5,9 @@ import com.openclassrooms.chatop.dto.MessageResponseDto;
 import com.openclassrooms.chatop.mapper.MessageMapper;
 import com.openclassrooms.chatop.model.Message;
 import com.openclassrooms.chatop.service.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/messages")
+@Tag(name = "Messages", description = "Create messages")
 public class MessageController {
 
     private final MessageService messageService;
@@ -25,6 +29,8 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    @Operation(summary = "Create a message", description = "Create a message for a Rental")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/")
     public MessageResponseDto createMessage(@Valid @RequestBody CreateMessageRequestDto createMessageRequestDto) {
         try {

@@ -8,6 +8,10 @@ import com.openclassrooms.chatop.mapper.UserMapper;
 import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.repository.UserRepository;
 import com.openclassrooms.chatop.service.UserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "User", description = "User operations")
 public class UserController {
 
     private final UserService userService;
@@ -32,6 +37,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Register new user", description = "Register new user")
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public JwtTokenDto register(@Valid @RequestBody final RegisterUserDto registerUserDto) {
@@ -47,6 +53,7 @@ public class UserController {
         return new JwtTokenDto("jwt");
     }
 
+    @Operation(summary = "Login", description = "Get an access token")
     @PostMapping("/login")
     public JwtTokenDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         try {
@@ -59,6 +66,9 @@ public class UserController {
         }
     }
 
+
+    @Operation(summary = "Get user info", description = "Get user info")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/me")
     public UserDto getUserInfo(Principal principal) {
         Optional<User> foundUser = userService.findUserByEmail(principal.getName());
@@ -68,6 +78,9 @@ public class UserController {
         return userMapper.userToUserDTO(foundUser.get());
     }
 
+
+    @Operation(summary = "Get user info by its id", description = "Get user info by its id")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/user/{id}")
     public UserDto getUser(@PathVariable long id) {
         Optional<User> foundUser = userService.findUserById(id);

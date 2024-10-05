@@ -79,10 +79,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         catch(ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print("invalid_token");
-        }
+        }/*
         catch(Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().print("Authentication failed");
-        }
+            response.getWriter().print("Authentication failed"+e.getMessage());
+        }*/
     }
 }

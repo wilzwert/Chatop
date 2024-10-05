@@ -47,7 +47,15 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                    auth.requestMatchers("/api/auth/register", "/api/auth/login", "/"+storageProperties.getUploadDir()+"/**").permitAll()
+                    auth.requestMatchers(
+                            "/api/auth/register",
+                            "/api/auth/login",
+                            "/"+storageProperties.getUploadDir()+"/**",
+                            "/v3/api-docs",
+                            "/v3/api-docs/",
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

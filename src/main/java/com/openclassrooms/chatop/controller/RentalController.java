@@ -6,6 +6,9 @@ import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.service.RentalService;
 import com.openclassrooms.chatop.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/rentals")
+@Tag(name = "Rentals", description = "List, create or update rentals")
 public class RentalController {
 
     private final RentalService rentalService;
@@ -35,6 +39,8 @@ public class RentalController {
         this.userService = userService;
     }
 
+    @Operation(summary = "List all rentals", description = "List all rentals")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("")
     public RentalsDto getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
@@ -43,6 +49,9 @@ public class RentalController {
         return new RentalsDto(rentalDtos);
     }
 
+
+    @Operation(summary = "Get a rental", description = "Get a rental")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     public RentalDto getRental(@PathVariable int id) {
         Optional<Rental> foundRental = rentalService.findRentalById(id);
@@ -52,6 +61,8 @@ public class RentalController {
         return rentalMapper.rentalToRentalDto(foundRental.get());
     }
 
+    @Operation(summary = "Create a rental", description = "Create a rental")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalResponseDto createRental(@Valid @ModelAttribute CreateRentalRequestDto createRentalDto, Principal principal) {
         try {
@@ -72,6 +83,8 @@ public class RentalController {
         }
     }
 
+    @Operation(summary = "Update a rental", description = "Update a rental")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
