@@ -38,7 +38,7 @@ public class RentalController {
     @GetMapping("")
     public RentalsDto getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
-        List<RentalDto> rentalDtos = new ArrayList<RentalDto>();
+        List<RentalDto> rentalDtos = new ArrayList<>();
         rentals.stream().map(rentalMapper::rentalToRentalDto).forEach(rentalDtos::add);
         return new RentalsDto(rentalDtos);
     }
@@ -65,19 +65,17 @@ public class RentalController {
             createRental.setCreatedAt(LocalDateTime.now());
             createRental.setUpdatedAt(LocalDateTime.now());
             Rental rental = rentalService.createRental(createRental, createRentalDto.getPicture());
+            return new RentalResponseDto("Rental "+rental.getName()+" created !");
         }
         catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Rental could not be created");
         }
-
-        return new RentalResponseDto("Rental created !");
     }
 
     @PutMapping("/{id}")
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
             Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);
-            System.out.println(updateRental);
             updateRental.setId(id);
             Rental updatedRental = rentalService.updateRental(updateRental, updateRentalDto.getPicture());
             return new RentalResponseDto("Rental "+updatedRental.getName()+" updated !");

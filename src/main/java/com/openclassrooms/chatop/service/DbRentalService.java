@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop.service;
 
-import com.openclassrooms.chatop.exceptions.StorageFileNotFoundException;
 import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -51,15 +49,20 @@ public class DbRentalService implements RentalService {
         rental.setOwnerId(existingRental.get().getOwnerId());
         rental.setUpdatedAt(LocalDateTime.now());
 
-        if(multipartFile != null) {
+        if(multipartFile != null && !multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
+            // get previous picture so that we can delete it if picture is updated
+            String previousPicture = existingRental.get().getPicture();
             rental.setPicture(storePicture(multipartFile));
+            if(previousPicture != null && !previousPicture.isBlank()) {
+                fileService.deleteFileFromUrl(previousPicture);
+            }
         }
 
         return rentalRepository.save(rental);
     }
 
     public String storePicture(final MultipartFile multipartFile) {
-        storageService.store(multipartFile);
-        return fileService.generateUrl(storageService.loadAsResource(multipartFile.getOriginalFilename()));
+        String newFilename = storageService.store(multipartFile);
+        return fileService.generateUrl(storageService.loadAsResource(newFilename));
     }
 }
