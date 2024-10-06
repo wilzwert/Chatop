@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -28,16 +26,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtService jwtService;
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
     public JwtAuthenticationFilter(
             @Autowired final CustomUserDetailsService customUserDetailsService,
-            @Autowired final JwtService jwtService,
-            @Autowired final HandlerExceptionResolver handlerExceptionResolver
+            @Autowired final JwtService jwtService
     ) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtService = jwtService;
-        this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
     @Override
@@ -79,10 +74,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         catch(ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print("invalid_token");
-        }
+        }/*
         catch(Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().print("Authentication failed");
-        }
+            response.getWriter().print("Authentication failed"+e.getMessage());
+        }*/
     }
 }

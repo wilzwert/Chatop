@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop;
 
-import com.openclassrooms.chatop.configuration.ApplicationConfiguration;
 import com.openclassrooms.chatop.configuration.ServerProperties;
 import com.openclassrooms.chatop.configuration.StorageProperties;
 import com.openclassrooms.chatop.service.StorageService;
@@ -20,8 +19,6 @@ public class ChatopApplication {
 
     @Bean
     CommandLineRunner init(StorageService storageService) {
-        return (args) -> {
-            storageService.init();
-        };
+        return (args) -> storageService.init();
     }
 }

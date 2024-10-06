@@ -2,7 +2,6 @@ package com.openclassrooms.chatop.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.Payload;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;

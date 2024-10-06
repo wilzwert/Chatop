@@ -1,7 +1,6 @@
 package com.openclassrooms.chatop.mapper;
 
 import com.openclassrooms.chatop.dto.CreateRentalRequestDto;
-import com.openclassrooms.chatop.dto.RentalActionRequestDto;
 import com.openclassrooms.chatop.dto.RentalDto;
 import com.openclassrooms.chatop.dto.UpdateRentalRequestDto;
 import com.openclassrooms.chatop.model.Rental;
@@ -14,8 +13,6 @@ import org.mapstruct.factory.Mappers;
 public interface RentalMapper {
 
     RentalMapper INSTANCE = Mappers.getMapper(RentalMapper.class);
-    //DateTimeFormatter DATE_FORMATTER_USER_TO_DTO = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    // DateTimeFormatter DATE_FORMATTER_DTO_TO_USER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
@@ -24,6 +21,7 @@ public interface RentalMapper {
     @Mapping(source = "picture", target = "picture")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "ownerId", target = "ownerId")
+
     // Assuming createdAt and updatedAt are available in User entity or will be manually set in DTO
     @Mapping(source = "createdAt", target = "createdAt", dateFormat = "yyyy/MM/dd")
     @Mapping(source = "updatedAt", target = "updatedAt", dateFormat = "yyyy/MM/dd")
