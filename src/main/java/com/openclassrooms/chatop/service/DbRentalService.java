@@ -74,6 +74,9 @@ public class DbRentalService implements RentalService {
     public void deleteRental(final Rental rental) {
             rentalRepository.delete(rental);
             aclService.removeAllPermissions(rental);
+            if(!rental.getPicture().isBlank()) {
+                fileService.deleteFileFromUrl(rental.getPicture());
+            }
     }
 
     public String storePicture(final MultipartFile multipartFile) {
