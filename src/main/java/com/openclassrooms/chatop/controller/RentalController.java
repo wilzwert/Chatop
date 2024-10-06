@@ -59,7 +59,7 @@ public class RentalController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RentalsDto.class))
             })
     })
-    @GetMapping("")
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalsDto getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
         List<RentalDto> rentalDtos = new ArrayList<>();
@@ -78,7 +78,7 @@ public class RentalController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDto.class))
             })
     })
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalDto getRental(@PathVariable @Parameter(name = "id", description = "Rental id", example = "1") int id) {
         Optional<Rental> foundRental = rentalService.findRentalById(id);
         if(foundRental.isEmpty()) {
@@ -120,7 +120,7 @@ public class RentalController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RentalResponseDto.class))
             })
     })
-    @PutMapping("/{id}")
+    @PutMapping(value ="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
             Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);

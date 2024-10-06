@@ -12,7 +12,9 @@ import lombok.Getter;
 public class LoginRequestDto {
     @NotBlank
     @JsonAlias({"login", "email"})
+    @Schema(description = "User email (aliased by 'login')")
     private String login;
     @NotBlank
+    @Schema(description = "User password")
     private String password;
 }

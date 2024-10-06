@@ -10,5 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(description = "Response message after message creation" )
 public class MessageResponseDto {
+    @Schema(description = "The confirmation message")
     private String message;
 }

@@ -10,5 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(description = "Response message after rental creation or update" )
 public class RentalResponseDto {
+    @Schema(description = "The confirmation message")
     private String message;
 }

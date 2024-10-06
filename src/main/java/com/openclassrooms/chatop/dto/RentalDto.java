@@ -12,15 +12,31 @@ import lombok.*;
 @Schema(description = "Rental representation" )
 public class RentalDto {
     private int id;
+
+    @Schema(description = "Rental name")
     private String name;
+
+    @Schema(description = "Rental surface in square meters")
     private float surface;
+
+    @Schema(description = "Rental price in euros per night")
     private float price;
+
+    @Schema(description = "Rental picture URL")
     private String picture;
+
+    @Schema(description = "Rental description")
     private String description;
+
     @JsonProperty("owner_id")
+    @Schema(description = "Rental owner user id")
     private int ownerId;
+
     @JsonProperty("created_at")
+    @Schema(description = "Creation date")
     private String createdAt;
+
     @JsonProperty("updated_at")
+    @Schema(description = "Update date")
     private String updatedAt;
 }

@@ -10,5 +10,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Schema(description = "JWT token response on login success" )
 public class JwtTokenDto {
+    @Schema(description = "The JWT token")
     private String token;
 }

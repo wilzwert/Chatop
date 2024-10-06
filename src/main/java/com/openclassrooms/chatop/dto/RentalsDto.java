@@ -13,5 +13,6 @@ import java.util.List;
 @Setter
 @Schema(description = "Representation of a list of rentals" )
 public class RentalsDto {
+    @Schema(description = "The list of rentals")
     private final List<RentalDto> rentals;
 }
