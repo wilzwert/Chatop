@@ -3,8 +3,10 @@ package com.openclassrooms.chatop.exceptions;
 import com.openclassrooms.chatop.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,5 +60,23 @@ public class GlobalExceptionHandler {
         ErrorResponseDto.setMessage("File not found");
         ErrorResponseDto.setTime(new Date().toString());
         return new ResponseEntity<>(ErrorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> generateAccessDeniedException(AccessDeniedException ex) {
+        ErrorResponseDto ErrorResponseDto = new ErrorResponseDto();
+        ErrorResponseDto.setStatus(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+        ErrorResponseDto.setMessage("Access denied");
+        ErrorResponseDto.setTime(new Date().toString());
+        return new ResponseEntity<>(ErrorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponseDto> generateHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        ErrorResponseDto ErrorResponseDto = new ErrorResponseDto();
+        ErrorResponseDto.setStatus(ex.getStatusCode().toString());
+        ErrorResponseDto.setMessage("Unsupported method");
+        ErrorResponseDto.setTime(new Date().toString());
+        return new ResponseEntity<>(ErrorResponseDto, ex.getStatusCode());
     }
 }

@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -121,6 +122,7 @@ public class RentalController {
             })
     })
     @PutMapping(value ="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasPermission(#id, 'com.openclassrooms.chatop.model.Rental', 'WRITE')")
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
             Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);
@@ -131,5 +133,26 @@ public class RentalController {
         catch(EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found");
         }
+    }
+
+    @Operation(summary = "Delete a rental", description = "Deletes a rental")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully deleted", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = RentalDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Not found - The rental  was not found", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDto.class))
+            })
+    })
+    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasPermission(#id, 'com.openclassrooms.chatop.model.Rental', 'DELETE')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRental(@PathVariable @Parameter(name = "id", description = "Rental id", example = "1") int id) {
+        Optional<Rental> foundRental = rentalService.findRentalById(id);
+        if(foundRental.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found");
+        }
+        rentalService.deleteRental(foundRental.get());
     }
 }

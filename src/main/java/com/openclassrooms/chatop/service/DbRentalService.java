@@ -3,6 +3,7 @@ package com.openclassrooms.chatop.service;
 import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,10 +21,17 @@ public class DbRentalService implements RentalService {
 
     private final FileService fileService;
 
-    public DbRentalService(@Autowired final RentalRepository rentalRepository, @Autowired final StorageService storageService, @Autowired final FileService fileService) {
+    private final CustomAclService aclService;
+
+    public DbRentalService(
+            @Autowired final RentalRepository rentalRepository,
+            @Autowired final StorageService storageService,
+            @Autowired final FileService fileService,
+            @Autowired final CustomAclService aclService) {
         this.rentalRepository = rentalRepository;
         this.storageService = storageService;
         this.fileService = fileService;
+        this.aclService = aclService;
     }
 
     public List<Rental> findAllRentals() {
@@ -34,10 +42,12 @@ public class DbRentalService implements RentalService {
         return rentalRepository.findById(id);
     }
 
+    @Transactional
     public Rental createRental(final Rental rental, MultipartFile multipartFile) {
-        // TODO handle multipartFile storage and url generation
         rental.setPicture(storePicture(multipartFile));
-        return rentalRepository.save(rental);
+        Rental newRental = rentalRepository.save(rental);
+        aclService.grantOwnerPermissions(rental);
+        return newRental;
     }
 
     public Rental updateRental(final Rental rental, MultipartFile multipartFile) {
@@ -59,6 +69,11 @@ public class DbRentalService implements RentalService {
         }
 
         return rentalRepository.save(rental);
+    }
+
+    public void deleteRental(final Rental rental) {
+            rentalRepository.delete(rental);
+            aclService.removeAllPermissions(rental);
     }
 
     public String storePicture(final MultipartFile multipartFile) {
