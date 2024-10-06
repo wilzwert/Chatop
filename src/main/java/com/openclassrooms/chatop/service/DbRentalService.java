@@ -3,6 +3,7 @@ package com.openclassrooms.chatop.service;
 import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.model.AclService;
 import org.springframework.security.acls.model.MutableAclService;
@@ -43,10 +44,12 @@ public class DbRentalService implements RentalService {
         return rentalRepository.findById(id);
     }
 
+    @Transactional
     public Rental createRental(final Rental rental, MultipartFile multipartFile) {
         rental.setPicture(storePicture(multipartFile));
+        Rental newRental = rentalRepository.save(rental);
         aclService.createOwnerAcl(rental);
-        return rentalRepository.save(rental);
+        return newRental;
     }
 
     public Rental updateRental(final Rental rental, MultipartFile multipartFile) {

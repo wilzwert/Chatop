@@ -19,6 +19,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -121,6 +123,8 @@ public class RentalController {
             })
     })
     @PutMapping(value ="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    // @PreAuthorize("hasPermission(#id, 'WRITE') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'com.openclassrooms.chatop.model.Rental', 'WRITE')")
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
         try {
             Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);
