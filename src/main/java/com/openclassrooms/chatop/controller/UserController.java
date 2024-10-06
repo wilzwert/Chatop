@@ -58,11 +58,12 @@ public class UserController {
         registerUser.setUpdatedAt(LocalDateTime.now());
         try {
             User user = userService.registerUser(registerUser);
+            String token = userService.generateToken(user);
+            return new JwtTokenDto(token);
         }
         catch (EntityExistsException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
-        return new JwtTokenDto("jwt");
     }
 
     @Operation(summary = "Login", description = "Get an access token")
