@@ -5,8 +5,6 @@ import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.acls.model.AclService;
-import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +21,7 @@ public class DbRentalService implements RentalService {
 
     private final FileService fileService;
 
-    private CustomAclService aclService;
+    private final CustomAclService aclService;
 
     public DbRentalService(
             @Autowired final RentalRepository rentalRepository,
@@ -76,9 +74,5 @@ public class DbRentalService implements RentalService {
     public String storePicture(final MultipartFile multipartFile) {
         String newFilename = storageService.store(multipartFile);
         return fileService.generateUrl(storageService.loadAsResource(newFilename));
-    }
-
-    public void grantDefaultPermissions(final Rental rental) {
-
     }
 }

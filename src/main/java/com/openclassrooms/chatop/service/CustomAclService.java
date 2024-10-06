@@ -12,21 +12,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class CustomAclService {
 
-    private MutableAclService aclService;
+    private final MutableAclService aclService;
 
-    private Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    private static Logger logger = LogManager.getLogger(CustomAclService.class);
+    private static final Logger logger = LogManager.getLogger(CustomAclService.class);
 
     // default owner permissions for a domain object
-    private static List<Permission> defaultOwnerPermissions = Arrays.asList(BasePermission.READ, BasePermission.WRITE, BasePermission.DELETE);
+    private static final List<Permission> defaultOwnerPermissions = Arrays.asList(BasePermission.READ, BasePermission.WRITE, BasePermission.DELETE);
 
     public CustomAclService(MutableAclService aclService) {
         this.aclService = aclService;
