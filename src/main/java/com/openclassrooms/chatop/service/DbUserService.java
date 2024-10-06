@@ -17,9 +17,9 @@ import java.util.Optional;
 public class DbUserService implements UserService {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private AuthenticationManager authenticationManager;
-    private JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     public DbUserService(
             @Autowired final UserRepository userRepository,

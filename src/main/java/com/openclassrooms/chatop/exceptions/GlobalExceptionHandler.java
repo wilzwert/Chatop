@@ -1,5 +1,6 @@
 package com.openclassrooms.chatop.exceptions;
 
+import com.openclassrooms.chatop.dto.ErrorResponseDto;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +18,18 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @Data
-    public static class ErrorDTO {
-        private String status;
-        private String message;
-        private String time;
-    }
-
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<ErrorDTO> generateResponseStatusException(ResponseStatusException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setMessage(ex.getReason());
-        errorDTO.setStatus(String.valueOf(ex.getStatusCode().value()));
-        errorDTO.setTime(new Date().toString());
-        return new ResponseEntity<ErrorDTO>(errorDTO, ex.getStatusCode());
+    public ResponseEntity<ErrorResponseDto> generateResponseStatusException(ResponseStatusException ex) {
+        ErrorResponseDto ErrorResponseDto = new ErrorResponseDto();
+        ErrorResponseDto.setMessage(ex.getReason());
+        ErrorResponseDto.setStatus(String.valueOf(ex.getStatusCode().value()));
+        ErrorResponseDto.setTime(new Date().toString());
+        return new ResponseEntity<>(ErrorResponseDto, ex.getStatusCode());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDTO> generateMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
+    public ResponseEntity<ErrorResponseDto> generateMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        ErrorResponseDto ErrorResponseDto = new ErrorResponseDto();
         BindingResult bindingResult = ex.getBindingResult();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         StringBuilder errors = new StringBuilder();
@@ -43,27 +37,27 @@ public class GlobalExceptionHandler {
         for(FieldError fieldError : fieldErrors){
             errors.append(fieldError.getField()).append(": ").append(fieldError.getDefaultMessage()).append(". ");
         }
-        errorDTO.setMessage(errors.toString());
-        errorDTO.setStatus(String.valueOf(ex.getStatusCode().value()));
-        errorDTO.setTime(new Date().toString());
-        return new ResponseEntity<ErrorDTO>(errorDTO, ex.getStatusCode());
+        ErrorResponseDto.setMessage(errors.toString());
+        ErrorResponseDto.setStatus(String.valueOf(ex.getStatusCode().value()));
+        ErrorResponseDto.setTime(new Date().toString());
+        return new ResponseEntity<>(ErrorResponseDto, ex.getStatusCode());
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ErrorDTO> generateMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setStatus(String.valueOf(HttpStatus.PAYLOAD_TOO_LARGE.value()));
-        errorDTO.setMessage("Payload too large");
-        errorDTO.setTime(new Date().toString());
-        return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.PAYLOAD_TOO_LARGE);
+    public ResponseEntity<ErrorResponseDto> generateMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+        ErrorResponseDto ErrorResponseDto = new ErrorResponseDto();
+        ErrorResponseDto.setStatus(String.valueOf(HttpStatus.PAYLOAD_TOO_LARGE.value()));
+        ErrorResponseDto.setMessage("Payload too large");
+        ErrorResponseDto.setTime(new Date().toString());
+        return new ResponseEntity<>(ErrorResponseDto, HttpStatus.PAYLOAD_TOO_LARGE);
     }
-    /*
+
     @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<ErrorDTO> generateStorageFileNotFoundException(StorageFileNotFoundException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setStatus(String.valueOf(HttpStatus.NOT_FOUND.value()));
-        errorDTO.setMessage("File not found");
-        errorDTO.setTime(new Date().toString());
-        return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.NOT_FOUND);
-    }*/
+    public ResponseEntity<ErrorResponseDto> generateStorageFileNotFoundException(StorageFileNotFoundException ex) {
+        ErrorResponseDto ErrorResponseDto = new ErrorResponseDto();
+        ErrorResponseDto.setStatus(String.valueOf(HttpStatus.NOT_FOUND.value()));
+        ErrorResponseDto.setMessage("File not found");
+        ErrorResponseDto.setTime(new Date().toString());
+        return new ResponseEntity<>(ErrorResponseDto, HttpStatus.NOT_FOUND);
+    }
 }

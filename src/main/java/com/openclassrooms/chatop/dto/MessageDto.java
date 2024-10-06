@@ -1,6 +1,7 @@
 package com.openclassrooms.chatop.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Data
@@ -8,6 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Message representation" )
 public class MessageDto {
     private int id;
     @JsonProperty("rental_id")

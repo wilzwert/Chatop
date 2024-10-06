@@ -1,11 +1,12 @@
 package com.openclassrooms.chatop.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
+@Schema(description = "Object expected for user registration request" )
 public class RegisterUserDto {
     @NotBlank(message = "The email is required")
     @Email(message = "Email should be valid")

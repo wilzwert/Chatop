@@ -1,15 +1,15 @@
 package com.openclassrooms.chatop.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Representation of a user" )
 public class UserDto {
     private int id;
     private String email;

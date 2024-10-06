@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,16 +27,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtService jwtService;
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
     public JwtAuthenticationFilter(
             @Autowired final CustomUserDetailsService customUserDetailsService,
-            @Autowired final JwtService jwtService,
-            @Autowired final HandlerExceptionResolver handlerExceptionResolver
+            @Autowired final JwtService jwtService
     ) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtService = jwtService;
-        this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
     @Override
