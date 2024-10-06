@@ -13,4 +13,5 @@ public interface RentalService {
     List<Rental> findAllRentals();
     Optional<Rental> findRentalById(final int id);
     String storePicture(final MultipartFile multipartFile);
+    public void deleteRental(Rental rental);
 }

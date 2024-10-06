@@ -46,7 +46,7 @@ public class DbRentalService implements RentalService {
     public Rental createRental(final Rental rental, MultipartFile multipartFile) {
         rental.setPicture(storePicture(multipartFile));
         Rental newRental = rentalRepository.save(rental);
-        aclService.createOwnerAcl(rental);
+        aclService.grantOwnerPermissions(rental);
         return newRental;
     }
 
@@ -69,6 +69,11 @@ public class DbRentalService implements RentalService {
         }
 
         return rentalRepository.save(rental);
+    }
+
+    public void deleteRental(final Rental rental) {
+            rentalRepository.delete(rental);
+            aclService.removeAllPermissions(rental);
     }
 
     public String storePicture(final MultipartFile multipartFile) {

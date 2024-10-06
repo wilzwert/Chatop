@@ -29,7 +29,7 @@ public class CustomAclService {
         this.aclService = aclService;
     }
 
-    public void createOwnerAcl(Rental rental) {
+    public void grantOwnerPermissions(Rental rental) {
         logger.info("Creating owner acl");
         try {
             ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
@@ -38,19 +38,19 @@ public class CustomAclService {
             logger.info("Creating owner acl : creating acl object with sids {}", sids);
             MutableAcl acl = aclService.createAcl(oid);
             logger.info("Creating owner acl : creating acl object with acl {}", acl);
-            createOwnerAcl(acl, sids);
+            grantOwnerPermissions(acl, sids);
         }
         catch(Exception e) {
             logger.error("Error creating owner acl {}", e.getMessage());
         }
     }
 
-    private void createOwnerAcl(MutableAcl acl, List<Sid> sids) {
-        createOwnerAcl(acl, sids, defaultOwnerPermissions);
+    private void grantOwnerPermissions(MutableAcl acl, List<Sid> sids) {
+        grantOwnerPermissions(acl, sids, defaultOwnerPermissions);
     }
 
     @Transactional
-    public void createOwnerAcl(MutableAcl acl, List<Sid> sids, List<Permission> permissions) {
+    public void grantOwnerPermissions(MutableAcl acl, List<Sid> sids, List<Permission> permissions) {
         sids.forEach((Sid sid) ->
                 permissions.forEach((Permission permission) -> {
                     logger.info("Creating owner acl for Sid {} and permission {}", sid, permission);
@@ -58,5 +58,11 @@ public class CustomAclService {
                 })
         );
         aclService.updateAcl(acl);
+    }
+
+    public void removeAllPermissions(Rental rental) {
+        ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
+        logger.info("Removing all permissions for rental {}, oid {}", rental, oid);
+        aclService.deleteAcl(oid, true);
     }
 }
