@@ -4,6 +4,8 @@ import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.model.AclService;
+import org.springframework.security.acls.model.MutableAclService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,10 +22,17 @@ public class DbRentalService implements RentalService {
 
     private final FileService fileService;
 
-    public DbRentalService(@Autowired final RentalRepository rentalRepository, @Autowired final StorageService storageService, @Autowired final FileService fileService) {
+    private CustomAclService aclService;
+
+    public DbRentalService(
+            @Autowired final RentalRepository rentalRepository,
+            @Autowired final StorageService storageService,
+            @Autowired final FileService fileService,
+            @Autowired final CustomAclService aclService) {
         this.rentalRepository = rentalRepository;
         this.storageService = storageService;
         this.fileService = fileService;
+        this.aclService = aclService;
     }
 
     public List<Rental> findAllRentals() {
@@ -35,8 +44,8 @@ public class DbRentalService implements RentalService {
     }
 
     public Rental createRental(final Rental rental, MultipartFile multipartFile) {
-        // TODO handle multipartFile storage and url generation
         rental.setPicture(storePicture(multipartFile));
+        aclService.createOwnerAcl(rental);
         return rentalRepository.save(rental);
     }
 
@@ -64,5 +73,9 @@ public class DbRentalService implements RentalService {
     public String storePicture(final MultipartFile multipartFile) {
         String newFilename = storageService.store(multipartFile);
         return fileService.generateUrl(storageService.loadAsResource(newFilename));
+    }
+
+    public void grantDefaultPermissions(final Rental rental) {
+
     }
 }
