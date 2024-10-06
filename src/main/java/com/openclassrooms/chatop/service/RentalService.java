@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RentalService {
-    public Rental createRental(Rental rental, MultipartFile multipartFile);
-    // public Rental updateRental(Rental rental);
-    public Rental updateRental(Rental rental, MultipartFile multipartFile);
-    public List<Rental> findAllRentals();
-    public Optional<Rental> findRentalById(final int id);
-    public String storePicture(final MultipartFile multipartFile);
+    Rental createRental(Rental rental, MultipartFile multipartFile);
+    Rental updateRental(Rental rental, MultipartFile multipartFile);
+    List<Rental> findAllRentals();
+    Optional<Rental> findRentalById(final int id);
+    String storePicture(final MultipartFile multipartFile);
 }
