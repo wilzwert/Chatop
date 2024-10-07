@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop.service;
 
-import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.model.User;
 import org.springframework.security.core.AuthenticationException;
 
@@ -14,5 +13,5 @@ public interface UserService {
     Optional<User> findUserById(final long id);
     String encodePassword(String password);
     String generateToken(User user);
-    public void deleteUser(User user);
+    void deleteUser(User user);
 }

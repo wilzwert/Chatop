@@ -2,7 +2,6 @@ package com.openclassrooms.chatop.listener;
 
 import com.openclassrooms.chatop.exceptions.StorageFileNotFoundException;
 import com.openclassrooms.chatop.model.Rental;
-import com.openclassrooms.chatop.service.CustomAclService;
 import com.openclassrooms.chatop.service.FileService;
 import jakarta.persistence.PostRemove;
 import org.apache.logging.log4j.LogManager;
