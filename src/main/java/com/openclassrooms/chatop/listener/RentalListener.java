@@ -18,7 +18,7 @@ public class RentalListener {
     }
 
     @PostRemove
-    public void  removeFile(Rental rental) {
+    public void  postRemove(Rental rental) {
         if(!rental.getPicture().isBlank()) {
             logger.info("Removing picture for rental {}", rental.getPicture());
             try {
