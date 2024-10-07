@@ -49,6 +49,11 @@ public class DbUserService implements UserService {
     }
 
     @Override
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    @Override
     public User authenticateUser(String email, String password) throws AuthenticationException {
         Optional<User> user = findUserByEmail(email);
         if(user.isEmpty()) {
@@ -79,4 +84,6 @@ public class DbUserService implements UserService {
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
+
+
 }
