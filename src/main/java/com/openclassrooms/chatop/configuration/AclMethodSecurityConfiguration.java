@@ -38,7 +38,13 @@ public class AclMethodSecurityConfiguration  {
     @Bean
     public MutableAclService mutableAclService() {
         LookupStrategy lookupStrategy = new BasicLookupStrategy(dataSource, aclCache(), aclAuthorizationStrategy(), new ConsoleAuditLogger());
-        return new JdbcMutableAclService(dataSource, lookupStrategy, aclCache());
+        JdbcMutableAclService jdbcMutableAclService = new JdbcMutableAclService(dataSource, lookupStrategy, aclCache());
+
+        // For MySQL ONLY
+        jdbcMutableAclService.setClassIdentityQuery("SELECT @@IDENTITY");
+        jdbcMutableAclService.setSidIdentityQuery("SELECT @@IDENTITY");
+
+        return jdbcMutableAclService;
     }
 
     @Bean

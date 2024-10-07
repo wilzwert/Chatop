@@ -29,16 +29,17 @@ public class CustomAclService implements AclService {
     }
 
     public void grantOwnerPermissions(Rental rental) {
-        logger.info("Creating owner acl for rental {}", rental);
+        logger.info("Creating owner acl for rental {}", rental.getId());
         try {
             ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
             List<Sid> sids = new SidRetrievalStrategyImpl().getSids(SecurityContextHolder.getContext().getAuthentication());
             MutableAcl acl = aclService.createAcl(oid);
-            logger.info("Granting owner permissions for rental  {}, oid {}, sids {}", rental, oid, sids);
+            logger.info("Granting owner permissions for rental  {}, oid {}, sids {}", rental.getId(), oid, sids);
             grantOwnerPermissions(acl, sids);
         }
         catch(Exception e) {
             logger.error("Error creating owner acl {}", e.getMessage());
+            throw e;
         }
     }
 
