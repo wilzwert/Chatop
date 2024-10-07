@@ -56,7 +56,7 @@ public class DbRentalService implements RentalService {
             throw new EntityNotFoundException();
         }
         rental.setId(existingRental.get().getId());
-        rental.setOwnerId(existingRental.get().getOwnerId());
+        rental.setOwner(existingRental.get().getOwner());
         rental.setUpdatedAt(LocalDateTime.now());
 
         if(multipartFile != null && !multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {

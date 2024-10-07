@@ -5,7 +5,11 @@ import com.openclassrooms.chatop.dto.ErrorResponseDto;
 import com.openclassrooms.chatop.dto.MessageResponseDto;
 import com.openclassrooms.chatop.mapper.MessageMapper;
 import com.openclassrooms.chatop.model.Message;
+import com.openclassrooms.chatop.model.Rental;
+import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.service.MessageService;
+import com.openclassrooms.chatop.service.RentalService;
+import com.openclassrooms.chatop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -33,13 +39,21 @@ import java.time.LocalDateTime;
         })
 })
 public class MessageController {
+    private final UserService userService;
+
+    private final RentalService rentalService;
 
     private final MessageService messageService;
 
     private final MessageMapper messageMapper = MessageMapper.INSTANCE;
 
-    public MessageController(@Autowired MessageService messageService) {
+    public MessageController(
+            @Autowired MessageService messageService,
+            @Autowired UserService userService,
+            @Autowired RentalService rentalService) {
         this.messageService = messageService;
+        this.userService = userService;
+        this.rentalService = rentalService;
     }
 
     @Operation(summary = "Create a message", description = "Create a message for a Rental")
@@ -50,9 +64,20 @@ public class MessageController {
             })
     })
     @PostMapping("/")
-    public MessageResponseDto createMessage(@Valid @RequestBody CreateMessageRequestDto createMessageRequestDto) {
+    public MessageResponseDto createMessage(@Valid @RequestBody CreateMessageRequestDto createMessageRequestDto, Principal principal) {
         try {
+            Optional<User> foundUser = userService.findUserByEmail(principal.getName());
+            if(foundUser.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
+            }
+            Optional<Rental> foundRental = rentalService.findRentalById(createMessageRequestDto.getRentalId());
+            if(foundRental.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get rental info");
+            }
+
             Message createMessage = messageMapper.messageRequestDtoToMessage(createMessageRequestDto);
+            createMessage.setUser(foundUser.get());
+            createMessage.setRental(foundRental.get());
             LocalDateTime now = LocalDateTime.now();
             createMessage.setCreatedAt(now);
             createMessage.setUpdatedAt(now);

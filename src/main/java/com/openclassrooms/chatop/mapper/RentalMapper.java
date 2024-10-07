@@ -20,7 +20,7 @@ public interface RentalMapper {
     @Mapping(source = "price", target = "price")
     @Mapping(source = "picture", target = "picture")
     @Mapping(source = "description", target = "description")
-    @Mapping(source = "ownerId", target = "ownerId")
+    @Mapping(source = "owner.id", target = "ownerId")
 
     // Assuming createdAt and updatedAt are available in User entity or will be manually set in DTO
     @Mapping(source = "createdAt", target = "createdAt", dateFormat = "yyyy/MM/dd")
