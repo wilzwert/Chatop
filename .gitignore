@@ -34,3 +34,6 @@ build/
 
 # user upload
 /upload/
+
+# environment configuration
+.env

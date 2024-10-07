@@ -8,7 +8,6 @@ import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.SidRetrievalStrategyImpl;
 import org.springframework.security.acls.model.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class CustomAclService {
+public class CustomAclService implements AclService {
 
     private final MutableAclService aclService;
 
@@ -30,14 +29,12 @@ public class CustomAclService {
     }
 
     public void grantOwnerPermissions(Rental rental) {
-        logger.info("Creating owner acl");
+        logger.info("Creating owner acl for rental {}", rental);
         try {
             ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
-            logger.info("Creating owner acl : retrieve sids for rental {}", rental);
             List<Sid> sids = new SidRetrievalStrategyImpl().getSids(SecurityContextHolder.getContext().getAuthentication());
-            logger.info("Creating owner acl : creating acl object with sids {}", sids);
             MutableAcl acl = aclService.createAcl(oid);
-            logger.info("Creating owner acl : creating acl object with acl {}", acl);
+            logger.info("Granting owner permissions for rental  {}, oid {}, sids {}", rental, oid, sids);
             grantOwnerPermissions(acl, sids);
         }
         catch(Exception e) {
@@ -45,7 +42,7 @@ public class CustomAclService {
         }
     }
 
-    private void grantOwnerPermissions(MutableAcl acl, List<Sid> sids) {
+    public void grantOwnerPermissions(MutableAcl acl, List<Sid> sids) {
         grantOwnerPermissions(acl, sids, defaultOwnerPermissions);
     }
 
@@ -64,5 +61,6 @@ public class CustomAclService {
         ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
         logger.info("Removing all permissions for rental {}, oid {}", rental, oid);
         aclService.deleteAcl(oid, true);
+        logger.info("All permissions removed.");
     }
 }
