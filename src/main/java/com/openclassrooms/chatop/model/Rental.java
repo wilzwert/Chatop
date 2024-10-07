@@ -1,5 +1,6 @@
 package com.openclassrooms.chatop.model;
 
+import com.openclassrooms.chatop.listener.RentalListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name="RENTALS")
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(RentalListener.class)
 public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

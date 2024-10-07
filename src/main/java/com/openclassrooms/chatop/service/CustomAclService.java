@@ -59,7 +59,7 @@ public class CustomAclService implements AclService {
 
     public void removeAllPermissions(Rental rental) {
         ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
-        logger.info("Removing all permissions for rental {}, oid {}", rental, oid);
+        logger.info("Removing all permissions for rental {}, oid {}", rental.getId(), oid);
         aclService.deleteAcl(oid, true);
         logger.info("All permissions removed.");
     }
