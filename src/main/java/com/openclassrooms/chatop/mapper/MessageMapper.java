@@ -4,14 +4,12 @@ import com.openclassrooms.chatop.dto.MessageDto;
 import com.openclassrooms.chatop.dto.CreateMessageRequestDto;
 import com.openclassrooms.chatop.model.Message;
 import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface MessageMapper {
-
-    MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "rental.id", target = "rentalId")

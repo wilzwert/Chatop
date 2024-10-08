@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,18 +18,14 @@ public class DbRentalService implements RentalService {
 
     private final StorageService storageService;
 
-    private final FileService fileService;
-
     private final AclService aclService;
 
     public DbRentalService(
             @Autowired final RentalRepository rentalRepository,
             @Autowired final StorageService storageService,
-            @Autowired final FileService fileService,
             @Autowired final AclService aclService) {
         this.rentalRepository = rentalRepository;
         this.storageService = storageService;
-        this.fileService = fileService;
         this.aclService = aclService;
     }
 
@@ -67,7 +62,7 @@ public class DbRentalService implements RentalService {
             String previousPicture = rental.getPicture();
             rental.setPicture(storePicture(multipartFile));
             if(previousPicture != null && !previousPicture.isBlank()) {
-                fileService.deleteFileFromUrl(previousPicture);
+                storageService.delete(previousPicture);
             }
         }
 
@@ -80,7 +75,6 @@ public class DbRentalService implements RentalService {
     }
 
     public String storePicture(final MultipartFile multipartFile) {
-        String newFilename = storageService.store(multipartFile);
-        return fileService.generateUrl(storageService.loadAsResource(newFilename));
+        return storageService.store(multipartFile);
     }
 }

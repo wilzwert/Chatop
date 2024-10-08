@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -36,10 +35,11 @@ public class UserController {
 
     private final UserService userService;
 
-    private final UserMapper userMapper = UserMapper.INSTANCE;
+    private final UserMapper userMapper;
 
-    public UserController(@Autowired final UserService userService) {
+    public UserController(@Autowired final UserService userService, @Autowired UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @Operation(summary = "Register new user", description = "Register new user")

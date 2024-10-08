@@ -4,14 +4,12 @@ import com.openclassrooms.chatop.dto.RegisterUserDto;
 import com.openclassrooms.chatop.dto.UserDto;
 import com.openclassrooms.chatop.model.User;
 import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
-
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
