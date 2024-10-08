@@ -1,16 +1,11 @@
 package com.openclassrooms.chatop.mapper;
 
-import com.openclassrooms.chatop.configuration.ServerProperties;
-import com.openclassrooms.chatop.configuration.StorageProperties;
 import com.openclassrooms.chatop.dto.CreateRentalRequestDto;
 import com.openclassrooms.chatop.dto.FilenameToUrl;
 import com.openclassrooms.chatop.dto.RentalDto;
 import com.openclassrooms.chatop.dto.UpdateRentalRequestDto;
 import com.openclassrooms.chatop.model.Rental;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = FilenameToUrl.class)
 public abstract class RentalMapper {

@@ -2,8 +2,6 @@ package com.openclassrooms.chatop.dto;
 
 import com.openclassrooms.chatop.configuration.ServerProperties;
 import com.openclassrooms.chatop.configuration.StorageProperties;
-import org.mapstruct.Named;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
