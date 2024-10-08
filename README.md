@@ -6,7 +6,7 @@ This is the second project of my course as a full-stack Java / Angular developer
 # Installation
 ## Requirements
 - Java 17
-- Access to a MySQL server and a database
+- Access to a MySQL or MariadDB server and a database
 - Maven
 - Git
 - Postman for testing purposes
