@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "58de1a85-d002-4fd4-8a63-3ea9bb63c277",
-		"name": "Rental API",
+		"_postman_id": "bbeb8295-c68b-4b82-958c-998788681c89",
+		"name": "ChatopAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38710569"
 	},
@@ -39,11 +39,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/auth/register",
+							"raw": "{{apiHost}}:{{apiPort}}/api/auth/register",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"auth",
@@ -85,11 +85,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/auth/login",
+							"raw": "{{apiHost}}:{{apiPort}}/api/auth/login",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"auth",
@@ -138,11 +138,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/auth/me",
+							"raw": "{{apiHost}}:{{apiPort}}/api/auth/me",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"auth",
@@ -247,11 +247,11 @@
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/api/rentals",
+							"raw": "{{apiHost}}:{{apiPort}}/api/rentals",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"rentals"
@@ -306,11 +306,11 @@
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/api/rentals",
+							"raw": "{{apiHost}}:{{apiPort}}/api/rentals",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"rentals"
@@ -353,11 +353,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/rentals",
+							"raw": "{{apiHost}}:{{apiPort}}/api/rentals",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"rentals"
@@ -382,11 +382,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/rentals/{{createdRentalId}}",
+							"raw": "{{apiHost}}:{{apiPort}}/api/rentals/{{createdRentalId}}",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"rentals",
@@ -442,11 +442,11 @@
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/api/rentals/{{createdRentalId}}",
+							"raw": "{{apiHost}}:{{apiPort}}/api/rentals/{{createdRentalId}}",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"rentals",
@@ -497,11 +497,11 @@
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/api/rentals/{{secondCreatedRentalId}}",
+							"raw": "{{apiHost}}:{{apiPort}}/api/rentals/{{secondCreatedRentalId}}",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"rentals",
@@ -563,11 +563,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/messages/",
+							"raw": "{{apiHost}}:{{apiPort}}/api/messages/",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"messages",
@@ -598,11 +598,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/auth/me",
+							"raw": "{{apiHost}}:{{apiPort}}/api/auth/me",
 							"host": [
-								"localhost"
+								"{{apiHost}}"
 							],
-							"port": "8080",
+							"port": "{{apiPort}}",
 							"path": [
 								"api",
 								"auth",
@@ -669,6 +669,16 @@
 		{
 			"key": "randomText",
 			"value": ""
+		},
+		{
+			"key": "apiHost",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "apiPort",
+			"value": "8080",
+			"type": "string"
 		}
 	]
 }
