@@ -71,7 +71,7 @@ This will make the application available on the host name and port you chose whi
 
 Import the collection in Postman : https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman
 
-You can set host and port as collection variables apiHost and apiPort, respectively,  by selecting the variables set on ChatopAPI root and editing them. 
+You can set host and port as collection variables _apiHost_ and _apiPort_, respectively,  by selecting the variables set on ChatopAPI root and editing them. 
 Note that apiHost defaults to localhost and apiPort to 8080, as seen in env.examble.
 
 Then run it. 
@@ -142,7 +142,7 @@ Once the application is started, you should be able to access the API Documentat
 
 ## Error handling, logging
 - Global exception handler generating Http responses with appropriate Http status codes
-- Logging levels can be configured in application.properties. Defaults:
+- Logging levels can be configured in src/main/resources/application.properties. Defaults:
 
 ```
 logging.level.root=warn
