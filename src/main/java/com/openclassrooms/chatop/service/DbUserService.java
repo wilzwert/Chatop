@@ -20,17 +20,20 @@ public class DbUserService implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final AclService aclService;
 
     public DbUserService(
             @Autowired final UserRepository userRepository,
             @Autowired PasswordEncoder passwordEncoder,
             @Autowired AuthenticationManager authenticationManager,
-            @Autowired JwtService jwtService
+            @Autowired JwtService jwtService,
+            @Autowired AclService aclService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.aclService = aclService;
     }
 
     @Override
@@ -50,6 +53,7 @@ public class DbUserService implements UserService {
 
     @Override
     public void deleteUser(User user) {
+        aclService.removeUser(user);
         userRepository.delete(user);
     }
 
