@@ -48,6 +48,7 @@ copy .env.example .env
 ```
 
 Then setup variables according to your environment ; see .env.example for more information.
+Please note that there is a slight difference whether you're using MySQL or MariaDB, although default values should work for both.
 
 3. Create the database and import the schema provided in ressources/db_structure.sql
 
@@ -105,18 +106,25 @@ ng serve
 
 # Features
 ## API endpoints
-POST /api/auth/register : register a User (public endpoint)
-POST /api/auth/login : login with email and password, and get a JWT Token (public endpoint)
-GET /api/auth/me : get current User
-DELETE /api/auth/me : delete current User account 
+> POST /api/auth/register : register a User (public endpoint)
 
-GET /api/rentals : get a list of all rentals
-GET /api/rental/:id : get an rental by its id
-POST /api/rental : create a Rental
-PUT /api/rental/:id : update a Rental (only if owned by current User)
-DELETE /api/rental/:id : delete a Rental (only if owned by current User)
+> POST /api/auth/login : login with email and password, and get a JWT Token (public endpoint)
 
-POST /api/message : create a message
+> GET /api/auth/me : get current User
+
+> DELETE /api/auth/me : delete current User account 
+
+> GET /api/rentals : get a list of all rentals
+
+> GET /api/rental/:id : get an rental by its id
+
+> POST /api/rental : create a Rental
+
+> PUT /api/rental/:id : update a Rental (only if owned by current User)
+
+> DELETE /api/rental/:id : delete a Rental (only if owned by current User)
+
+> POST /api/message : create a message
 
 ### API documentation
 Once the application is started, you should be able to access the API Documentation (please adjust host and port to your environment) :
@@ -133,8 +141,8 @@ Once the application is started, you should be able to access the API Documentat
 - File upload / deletion
 
 ## Error handling, logging
-- global exception handler generating Http response with appropriate Http status codes
-- logging levels can be configured in application.properties. Defaults:
+- Global exception handler generating Http responses with appropriate Http status codes
+- Logging levels can be configured in application.properties. Defaults:
 
 ```
 logging.level.root=warn
