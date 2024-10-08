@@ -79,7 +79,7 @@ public class CustomAclService implements AclService {
 
         if(!objectIdentities.isEmpty()) {
             try {
-                customAclPermissionService.removeAllPermissions(objectIdentities, List.of(sid));
+                customAclPermissionService.removeAllPermissions(objectIdentities, sid);
             } catch (Exception e) {
                 logger.error("Remove all permissions : error encountered {}", e.getMessage());
             }
