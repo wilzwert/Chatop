@@ -65,16 +65,21 @@ public class MessageController {
     })
     @PostMapping("/")
     public MessageResponseDto createMessage(@Valid @RequestBody CreateMessageRequestDto createMessageRequestDto, Principal principal) {
-        try {
-            Optional<User> foundUser = userService.findUserByEmail(principal.getName());
-            if(foundUser.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
-            }
-            Optional<Rental> foundRental = rentalService.findRentalById(createMessageRequestDto.getRentalId());
-            if(foundRental.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get rental info");
-            }
+        Optional<User> foundUser = userService.findUserByEmail(principal.getName());
+        if(foundUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
+        }
 
+        if(createMessageRequestDto.getUserId() != foundUser.get().getId()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
+        }
+
+        Optional<Rental> foundRental = rentalService.findRentalById(createMessageRequestDto.getRentalId());
+        if(foundRental.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get rental info");
+        }
+
+        try {
             Message createMessage = messageMapper.messageRequestDtoToMessage(createMessageRequestDto);
             createMessage.setUser(foundUser.get());
             createMessage.setRental(foundRental.get());
@@ -84,7 +89,7 @@ public class MessageController {
             Message message = messageService.createMessage(createMessage);
         }
         catch(Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Message could not be created");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Message could not be created"+e.getMessage());
         }
 
         return new MessageResponseDto("Message created !");
