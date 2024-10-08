@@ -104,8 +104,6 @@ public class RentalController {
             }
             Rental createRental = rentalMapper.rentalRequestDtoToRental(createRentalDto);
             createRental.setOwner(foundUser.get());
-            createRental.setCreatedAt(LocalDateTime.now());
-            createRental.setUpdatedAt(LocalDateTime.now());
             Rental rental = rentalService.createRental(createRental, createRentalDto.getPicture());
             return new RentalResponseDto("Rental "+rental.getName()+" created !");
         }

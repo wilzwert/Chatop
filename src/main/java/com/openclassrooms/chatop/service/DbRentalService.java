@@ -50,19 +50,21 @@ public class DbRentalService implements RentalService {
         return newRental;
     }
 
-    public Rental updateRental(final Rental rental, MultipartFile multipartFile) {
-        Optional<Rental> existingRental = findRentalById(rental.getId());
+    public Rental updateRental(final Rental updateRental, MultipartFile multipartFile) {
+        Optional<Rental> existingRental = findRentalById(updateRental.getId());
         if(existingRental.isEmpty()) {
             throw new EntityNotFoundException();
         }
-        rental.setId(existingRental.get().getId());
-        rental.setOwner(existingRental.get().getOwner());
-        rental.setCreatedAt(existingRental.get().getCreatedAt());
-        rental.setUpdatedAt(LocalDateTime.now());
+
+        Rental rental = existingRental.get();
+        rental.setName(updateRental.getName());
+        rental.setDescription(updateRental.getDescription());
+        rental.setSurface(updateRental.getSurface());
+        rental.setPrice(updateRental.getPrice());
 
         if(multipartFile != null && !multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
             // get previous picture so that we can delete it if picture is updated
-            String previousPicture = existingRental.get().getPicture();
+            String previousPicture = rental.getPicture();
             rental.setPicture(storePicture(multipartFile));
             if(previousPicture != null && !previousPicture.isBlank()) {
                 fileService.deleteFileFromUrl(previousPicture);

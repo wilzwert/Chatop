@@ -54,8 +54,6 @@ public class UserController {
     })
     public JwtTokenDto register(@Valid @RequestBody final RegisterUserDto registerUserDto) {
         User registerUser = userMapper.registerUserDtoToUser(registerUserDto);
-        registerUser.setCreatedAt(LocalDateTime.now());
-        registerUser.setUpdatedAt(LocalDateTime.now());
         try {
             User user = userService.registerUser(registerUser);
             String token = userService.generateToken(user);
