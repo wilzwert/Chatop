@@ -57,6 +57,7 @@ public class DbRentalService implements RentalService {
         }
         rental.setId(existingRental.get().getId());
         rental.setOwner(existingRental.get().getOwner());
+        rental.setCreatedAt(existingRental.get().getCreatedAt());
         rental.setUpdatedAt(LocalDateTime.now());
 
         if(multipartFile != null && !multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
