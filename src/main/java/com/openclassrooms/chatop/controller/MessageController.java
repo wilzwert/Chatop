@@ -83,9 +83,6 @@ public class MessageController {
             Message createMessage = messageMapper.messageRequestDtoToMessage(createMessageRequestDto);
             createMessage.setUser(foundUser.get());
             createMessage.setRental(foundRental.get());
-            LocalDateTime now = LocalDateTime.now();
-            createMessage.setCreatedAt(now);
-            createMessage.setUpdatedAt(now);
             Message message = messageService.createMessage(createMessage);
         }
         catch(Exception e) {

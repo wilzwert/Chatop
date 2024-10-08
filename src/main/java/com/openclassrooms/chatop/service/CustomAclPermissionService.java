@@ -50,6 +50,7 @@ public class CustomAclPermissionService implements AclPermissionService {
     public void removeAllPermissions(List<ObjectIdentity> objectIdentities, Sid sid) {
         try {
             // get acls for found object identities, filtered by sid
+            logger.info("Removing all permissions for Oids {}", objectIdentities);
             Map<ObjectIdentity, Acl> acls = aclService.readAclsById(objectIdentities);
             logger.info("Remove all permissions, found acls {}", acls);
             for (Acl acl : acls.values()) {

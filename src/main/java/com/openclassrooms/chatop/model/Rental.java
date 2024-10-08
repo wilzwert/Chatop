@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
 @Table(name="RENTALS")
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(RentalListener.class)
+@EntityListeners({RentalListener.class, AuditingEntityListener.class})
 public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +30,12 @@ public class Rental {
     private String picture;
     @Column(length = 2000)
     private String description;
+
+    @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -37,7 +44,5 @@ public class Rental {
     private User owner;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "rental")
-    // let db handle cascade deletion
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Message> messages;
 }
