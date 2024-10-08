@@ -47,7 +47,7 @@ Windows
 copy .env.example .env
 ```
 
-Then setup variables according to your environment.
+Then setup variables according to your environment ; see .env.example for more information.
 
 3. Create the database and import the schema provided in ressources/db_structure.sql
 
@@ -131,6 +131,24 @@ Once the application is started, you should be able to access the API Documentat
 - Entities relationships
 - Cascade handling
 - File upload / deletion
+
+## Error handling, logging
+- global exception handler generating Http response with appropriate Http status codes
+- logging levels can be configured in application.properties. Defaults:
+
+```
+logging.level.root=warn
+logging.level.org.springframework.security=warn
+logging.level.com.openclassrooms.chatop=error
+logging.level.com.openclassrooms.chatop.service=error
+logging.level.com.openclassrooms.chatop.controller=error
+```
+
+Level info for services and controllers can get very verbose under certain circumstances  :)
+
+
+
+
 
 
 
