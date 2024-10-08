@@ -46,11 +46,12 @@ public class RentalController {
 
     private final UserService userService;
 
-    private final RentalMapper rentalMapper = RentalMapper.INSTANCE;
+    private final RentalMapper rentalMapper;
 
-    public RentalController(@Autowired RentalService rentalService, @Autowired UserService userService) {
+    public RentalController(@Autowired RentalService rentalService, @Autowired UserService userService, @Autowired RentalMapper rentalMapper) {
         this.rentalService = rentalService;
         this.userService = userService;
+        this.rentalMapper = rentalMapper;
     }
 
     @Operation(summary = "List all rentals", description = "List all rentals")
