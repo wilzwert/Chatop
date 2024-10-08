@@ -98,12 +98,12 @@ public class RentalController {
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalResponseDto createRental(@Valid @ModelAttribute CreateRentalRequestDto createRentalDto, Principal principal) {
         try {
-            Rental createRental = rentalMapper.rentalRequestDtoToRental(createRentalDto);
             Optional<User> foundUser = userService.findUserByEmail(principal.getName());
             if(foundUser.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
             }
-            createRental.setOwnerId(foundUser.get().getId());
+            Rental createRental = rentalMapper.rentalRequestDtoToRental(createRentalDto);
+            createRental.setOwner(foundUser.get());
             createRental.setCreatedAt(LocalDateTime.now());
             createRental.setUpdatedAt(LocalDateTime.now());
             Rental rental = rentalService.createRental(createRental, createRentalDto.getPicture());

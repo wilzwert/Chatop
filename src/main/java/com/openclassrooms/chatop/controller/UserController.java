@@ -123,4 +123,17 @@ public class UserController {
         }
         return userMapper.userToUserDTO(foundUser.get());
     }
+
+
+    @Operation(summary = "Delete current user info", description = "Delete current user info")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCurrentUser(Principal principal) {
+        Optional<User> foundUser = userService.findUserByEmail(principal.getName());
+        if(foundUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        userService.deleteUser(foundUser.get());
+    }
 }

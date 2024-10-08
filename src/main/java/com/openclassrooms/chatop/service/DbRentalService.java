@@ -56,7 +56,8 @@ public class DbRentalService implements RentalService {
             throw new EntityNotFoundException();
         }
         rental.setId(existingRental.get().getId());
-        rental.setOwnerId(existingRental.get().getOwnerId());
+        rental.setOwner(existingRental.get().getOwner());
+        rental.setCreatedAt(existingRental.get().getCreatedAt());
         rental.setUpdatedAt(LocalDateTime.now());
 
         if(multipartFile != null && !multipartFile.isEmpty() && multipartFile.getOriginalFilename() != null) {
@@ -74,9 +75,6 @@ public class DbRentalService implements RentalService {
     public void deleteRental(final Rental rental) {
             rentalRepository.delete(rental);
             aclService.removeAllPermissions(rental);
-            if(!rental.getPicture().isBlank()) {
-                fileService.deleteFileFromUrl(rental.getPicture());
-            }
     }
 
     public String storePicture(final MultipartFile multipartFile) {

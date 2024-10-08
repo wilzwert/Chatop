@@ -14,8 +14,8 @@ public interface MessageMapper {
     MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "rentalId", target = "rentalId")
-    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "rental.id", target = "rentalId")
+    @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "message", target = "message")
 
     // Assuming createdAt and updatedAt are available in Message entity or will be manually set in DTO
