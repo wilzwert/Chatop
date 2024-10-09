@@ -7,6 +7,10 @@ import jakarta.persistence.PostRemove;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Rental entity listener used to handle picture deletion on Rental deletion
+ */
 public class RentalListener {
 
     private static final Logger logger = LogManager.getLogger(RentalListener.class);

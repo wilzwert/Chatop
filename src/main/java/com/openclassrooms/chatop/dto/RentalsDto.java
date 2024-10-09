@@ -8,6 +8,10 @@ import lombok.Setter;
 import java.util.List;
 
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO used to send a list of Message entities in a http response
+ */
 @RequiredArgsConstructor
 @Getter
 @Setter

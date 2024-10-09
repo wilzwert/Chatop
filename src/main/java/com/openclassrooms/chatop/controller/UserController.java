@@ -23,6 +23,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.Optional;
 
+
+/**
+ * @author Wilhelm Zwertvaegher
+ * Rest controller for auth and user related endpoints
+ */
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "User", description = "User operations")

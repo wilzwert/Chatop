@@ -5,6 +5,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO used to handle a user registration
+ */
 @Data
 @Schema(description = "Object expected for user registration request" )
 public class RegisterUserDto {

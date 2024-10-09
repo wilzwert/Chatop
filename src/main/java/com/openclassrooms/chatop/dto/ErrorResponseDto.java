@@ -3,6 +3,10 @@ package com.openclassrooms.chatop.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO for error responses
+ */
 @Data
 @Schema(description = "Common error object")
 public class ErrorResponseDto {

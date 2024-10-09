@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO used to send a confirmation message on Rental creation or update
+ */
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor

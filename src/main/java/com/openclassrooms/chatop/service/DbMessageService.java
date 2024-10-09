@@ -5,6 +5,9 @@ import com.openclassrooms.chatop.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Service
 public class DbMessageService implements MessageService {
 

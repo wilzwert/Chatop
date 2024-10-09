@@ -5,6 +5,9 @@ import org.springframework.security.core.AuthenticationException;
 
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 public interface UserService {
     User registerUser(User user);
     User authenticateUser(String email, String password) throws AuthenticationException;

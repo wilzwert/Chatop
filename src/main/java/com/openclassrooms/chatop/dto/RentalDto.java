@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO used to send a Rental in an http response
+ */
 @Data
 @Getter
 @Setter

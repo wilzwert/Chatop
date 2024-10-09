@@ -7,6 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO for Rental update request
+ */
 @Data
 @Schema(description = "Object expected for rental update request" )
 public class UpdateRentalRequestDto implements RentalActionRequestDto {

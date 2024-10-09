@@ -5,6 +5,10 @@ import com.openclassrooms.chatop.configuration.StorageProperties;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Convert an uploaded filename to a full URL
+ */
 @Component
 public class FilenameToUrl {
 

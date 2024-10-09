@@ -14,6 +14,9 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Service
 public class JwtService {
 

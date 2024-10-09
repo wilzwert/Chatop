@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.Getter;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO used for user login (ie token enquiry)
+ */
 @Data
 @Getter
 @Schema(description = "Object expected for login request" )

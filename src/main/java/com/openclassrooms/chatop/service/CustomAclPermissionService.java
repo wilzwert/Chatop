@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Service
 public class CustomAclPermissionService implements AclPermissionService {
     private static final Logger logger = LogManager.getLogger(CustomAclPermissionService.class);

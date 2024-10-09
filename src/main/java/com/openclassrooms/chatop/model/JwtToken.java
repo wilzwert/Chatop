@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Simple class to represent a JWT token and its claims
+ */
 @Getter
 @Setter
 @AllArgsConstructor

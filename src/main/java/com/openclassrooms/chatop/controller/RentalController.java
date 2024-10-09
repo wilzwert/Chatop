@@ -28,6 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Rest controller for rentals related endpoints
+ */
 @RestController
 @RequestMapping("/api/rentals")
 @Tag(name = "Rentals", description = "List, create or update rentals")

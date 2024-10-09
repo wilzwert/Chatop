@@ -28,6 +28,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Rest controller for messages related endpoints
+ */
 @RestController
 @RequestMapping("/api/messages")
 @Tag(name = "Messages", description = "Create messages")

@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Service
 public class CustomAclService implements AclService {
 

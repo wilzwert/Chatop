@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * DTO for Message creation
+ */
 @Data
 @Getter
 @Setter

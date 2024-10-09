@@ -10,6 +10,10 @@ import org.springframework.security.acls.model.Sid;
 
 import java.util.List;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * We use a custom service to handle permissions creation and removal on domain objects
+ */
 public interface AclPermissionService {
 
     void grantOwnerPermissions(ObjectIdentity objectIdentity, List<Sid> sids);

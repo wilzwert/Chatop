@@ -5,6 +5,11 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Custom annotation to validate image file
+ * Used for rental requests (create or update)
+ */
 @Documented
 @Constraint(validatedBy = {ImageFileValidator.class})
 @Target( { ElementType.FIELD })

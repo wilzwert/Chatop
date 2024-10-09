@@ -11,6 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Service
 public class DbRentalService implements RentalService {
 

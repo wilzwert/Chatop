@@ -14,6 +14,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Data
 @Entity
 @Table(name="MESSAGES")

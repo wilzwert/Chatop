@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 @Service
 public class DbUserService implements UserService {
 

@@ -7,6 +7,10 @@ import com.openclassrooms.chatop.dto.UpdateRentalRequestDto;
 import com.openclassrooms.chatop.model.Rental;
 import org.mapstruct.*;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Rental to DTO mapper
+ */
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = FilenameToUrl.class)
 public abstract class RentalMapper {
 

@@ -7,6 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ */
 public interface RentalService {
     Rental createRental(Rental rental, MultipartFile multipartFile);
     Rental updateRental(Rental rental, MultipartFile multipartFile);
