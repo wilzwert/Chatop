@@ -25,7 +25,6 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
-    @Autowired
     public FileSystemStorageService(StorageProperties properties) {
 
         if(properties.getUploadDir().trim().isEmpty()){

@@ -13,7 +13,7 @@ public class DbMessageService implements MessageService {
 
     private final MessageRepository messageRepository;
 
-    public DbMessageService(@Autowired final MessageRepository messageRepository) {
+    public DbMessageService(final MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
 

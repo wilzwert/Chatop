@@ -5,8 +5,6 @@ import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.service.StorageService;
 import jakarta.persistence.PostRemove;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * @author Wilhelm Zwertvaegher

@@ -24,9 +24,9 @@ public class DbRentalService implements RentalService {
     private final AclService aclService;
 
     public DbRentalService(
-            @Autowired final RentalRepository rentalRepository,
-            @Autowired final StorageService storageService,
-            @Autowired final AclService aclService) {
+            final RentalRepository rentalRepository,
+            final StorageService storageService,
+            final AclService aclService) {
         this.rentalRepository = rentalRepository;
         this.storageService = storageService;
         this.aclService = aclService;

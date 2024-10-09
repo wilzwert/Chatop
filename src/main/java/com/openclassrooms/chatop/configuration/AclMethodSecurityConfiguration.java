@@ -35,7 +35,7 @@ public class AclMethodSecurityConfiguration  {
 
     private final CacheManager cacheManager;
 
-    public AclMethodSecurityConfiguration(@Autowired DataSource dataSource, @Autowired CacheManager cacheManager) {
+    public AclMethodSecurityConfiguration(DataSource dataSource, CacheManager cacheManager) {
         this.dataSource = dataSource;
         this.cacheManager = cacheManager;
     }

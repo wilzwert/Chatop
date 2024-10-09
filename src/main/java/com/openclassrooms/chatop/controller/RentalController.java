@@ -53,7 +53,7 @@ public class RentalController {
 
     private final RentalMapper rentalMapper;
 
-    public RentalController(@Autowired RentalService rentalService, @Autowired UserService userService, @Autowired RentalMapper rentalMapper) {
+    public RentalController(RentalService rentalService, UserService userService, RentalMapper rentalMapper) {
         this.rentalService = rentalService;
         this.userService = userService;
         this.rentalMapper = rentalMapper;

@@ -32,7 +32,7 @@ public class CustomAclService implements AclService {
             "INNER JOIN acl_sid ON acl_entry.sid = acl_sid.id " +
             "WHERE acl_sid.sid = ?";
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public CustomAclService(CustomAclPermissionService customAclPermissionService, JdbcTemplate jdbcTemplate) {
         this.customAclPermissionService = customAclPermissionService;
