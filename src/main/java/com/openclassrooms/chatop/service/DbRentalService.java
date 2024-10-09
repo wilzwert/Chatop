@@ -4,7 +4,6 @@ import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
