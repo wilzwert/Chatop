@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @author Wilhelm Zwertvaegher
  */
 @Service
+@Slf4j
 public class JwtService {
 
     @Value("${security.jwt.secret-key}")
@@ -29,6 +31,7 @@ public class JwtService {
     public Optional<JwtToken> extractTokenFromRequest(HttpServletRequest request) throws ExpiredJwtException, MalformedJwtException, SecurityException, IllegalArgumentException {
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.info("Authorization header not found or not compatible with Bearer token");
             return Optional.empty();
         }
         final String token = authHeader.substring(7);
@@ -42,6 +45,7 @@ public class JwtService {
     }
 
     public String generateToken(User user) {
+        log.info("Generating JWT token for user {}", user.getEmail());
         return Jwts
                 .builder()
                 .subject(user.getEmail())

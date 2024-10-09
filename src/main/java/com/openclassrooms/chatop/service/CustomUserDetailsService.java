@@ -12,6 +12,7 @@ import java.util.Optional;
 
 /**
  * @author Wilhelm Zwertvaegher
+ * Implementation of UserDetailsService used by Spring Security
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

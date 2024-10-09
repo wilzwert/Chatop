@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import com.openclassrooms.chatop.configuration.StorageProperties;
 import com.openclassrooms.chatop.exceptions.StorageException;
 import com.openclassrooms.chatop.exceptions.StorageFileNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,15 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Wilhelm Zwertvaegher
  */
 @Service
+@Slf4j
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
     public FileSystemStorageService(StorageProperties properties) {
 
-        if(properties.getUploadDir().trim().isEmpty()){
+        if(properties.getUploadDir().trim().isEmpty()) {
+            log.error("Cannot initialize service: upload location is empty");
             throw new StorageException("File upload location can not be Empty.");
         }
 
@@ -37,6 +40,7 @@ public class FileSystemStorageService implements StorageService {
     public String store(MultipartFile file) {
         try {
             if (file.isEmpty() || file.getOriginalFilename() == null) {
+                log.error("Cannot store an empty file");
                 throw new StorageException("Failed to store empty file.");
             }
 
@@ -49,6 +53,7 @@ public class FileSystemStorageService implements StorageService {
                             Paths.get(uniqueFileName))
                     .normalize().toAbsolutePath();
             if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
+                log.error("Cannot store file outside current directory.");
                 // This is a security check
                 throw new StorageException(
                         "Cannot store file outside current directory.");
@@ -61,6 +66,7 @@ public class FileSystemStorageService implements StorageService {
             return uniqueFileName;
         }
         catch (IOException e) {
+            log.error("Failed to store file", e);
             throw new StorageException("Failed to store file.", e);
         }
     }
@@ -70,10 +76,12 @@ public class FileSystemStorageService implements StorageService {
         Resource resource = loadAsResource(filename);
         try {
             boolean result = resource.getFile().delete();
-            if(!result){
+            if(!result) {
+                log.error("Cannot get file for deletion: {}", filename);
                 throw new StorageFileNotFoundException("Cannot get file for deletion");
             }
         } catch (IOException e) {
+            log.error("Cannot get file for deletion: {}", filename, e);
             throw new StorageFileNotFoundException("Cannot get file for deletion", e);
         }
     }
@@ -89,9 +97,11 @@ public class FileSystemStorageService implements StorageService {
             Path file = load(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
+                log.info("Resource loaded for {}", filename);
                 return resource;
             }
             else {
+                log.error("Could not read file {}", filename);
                 throw new StorageFileNotFoundException(
                         "Could not read file: " + filename
                 );
@@ -99,6 +109,7 @@ public class FileSystemStorageService implements StorageService {
             }
         }
         catch (MalformedURLException e) {
+            log.error("Could not read file {}", filename, e);
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
@@ -109,6 +120,7 @@ public class FileSystemStorageService implements StorageService {
             Files.createDirectories(rootLocation);
         }
         catch (IOException e) {
+            log.error("Could not initialize storage", e);
             throw new StorageException("Could not initialize storage", e);
         }
     }

@@ -4,6 +4,7 @@ import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
  * @author Wilhelm Zwertvaegher
  */
 @Service
+@Slf4j
 public class DbRentalService implements RentalService {
 
     private final RentalRepository rentalRepository;
@@ -41,8 +43,10 @@ public class DbRentalService implements RentalService {
 
     @Transactional
     public Rental createRental(final Rental rental, MultipartFile multipartFile) {
+        log.info("Create Rental {}: setPicture", rental.getName());
         rental.setPicture(storePicture(multipartFile));
         Rental newRental = rentalRepository.save(rental);
+        log.info("Rental {} saved, setting owner permissions", rental.getName());
         aclService.grantOwnerPermissions(rental);
         return newRental;
     }
@@ -50,6 +54,7 @@ public class DbRentalService implements RentalService {
     public Rental updateRental(final Rental updateRental, MultipartFile multipartFile) {
         Optional<Rental> existingRental = findRentalById(updateRental.getId());
         if(existingRental.isEmpty()) {
+            log.error("Update Rental {}, rental is not found", updateRental.getId());
             throw new EntityNotFoundException();
         }
 
@@ -64,10 +69,11 @@ public class DbRentalService implements RentalService {
             String previousPicture = rental.getPicture();
             rental.setPicture(storePicture(multipartFile));
             if(previousPicture != null && !previousPicture.isBlank()) {
+                log.info("Update Rental {}, handling picture change", updateRental.getId());
                 storageService.delete(previousPicture);
             }
         }
-
+        log.error("Update Rental {}, saving", updateRental.getId());
         return rentalRepository.save(rental);
     }
 
