@@ -3,8 +3,6 @@ package com.openclassrooms.chatop.model;
 import com.openclassrooms.chatop.listener.RentalListener;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,4 +46,15 @@ public class Rental {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "rental")
     private List<Message> messages;
+
+    /**
+     * Override toString method to avoid never ending loops on User::toString or Message::toString
+     * @return String the string representation of this Rental
+     */
+    @Override
+    public String toString() {
+        return "Rental [id=" + id + ", name=" + name + ", createdAd=" + createdAt+", updatedAt=" + updatedAt+"],"
+                + "Owner [id=" + owner.getId() + "email=" +owner.getEmail() + "],"
+                +" messagesCount=" + (messages != null ? messages.size() : 0);
+    }
 }

@@ -22,7 +22,7 @@ cd Chatop
 2. Install dependencies
 Windows : 
 ``` bash
-./mvmn clean install
+./mvnw clean install
 ```
 
 Linux / unix :

@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +34,7 @@ public class AclMethodSecurityConfiguration  {
 
     private final CacheManager cacheManager;
 
-    public AclMethodSecurityConfiguration(@Autowired DataSource dataSource, @Autowired CacheManager cacheManager) {
+    public AclMethodSecurityConfiguration(DataSource dataSource, CacheManager cacheManager) {
         this.dataSource = dataSource;
         this.cacheManager = cacheManager;
     }

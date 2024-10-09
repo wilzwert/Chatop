@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop.model;
 
-import com.openclassrooms.chatop.listener.RentalListener;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,4 +50,15 @@ public class Message {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @Nullable
     private Rental rental;
+
+    /**
+     * Override toString method to avoid never ending loops on Rental::toString or User::toString
+     * @return String the string representation of this Message
+     */
+    @Override
+    public String toString() {
+        return "Message [id=" + id + ", message=" + message + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "],"
+            +(user != null ? " Owner [id=" + user.getId()+", email=" + user.getEmail()+" ]," : " Owner unknown,")
+            +(rental != null ? " Rental [id=" + rental.getId() + ", name="+rental.getName()+" ]" : "Rental unknown");
+    }
 }

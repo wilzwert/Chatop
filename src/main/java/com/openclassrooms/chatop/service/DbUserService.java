@@ -3,7 +3,6 @@ package com.openclassrooms.chatop.service;
 import com.openclassrooms.chatop.model.User;
 import com.openclassrooms.chatop.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,11 +25,11 @@ public class DbUserService implements UserService {
     private final AclService aclService;
 
     public DbUserService(
-            @Autowired final UserRepository userRepository,
-            @Autowired PasswordEncoder passwordEncoder,
-            @Autowired AuthenticationManager authenticationManager,
-            @Autowired JwtService jwtService,
-            @Autowired AclService aclService
+            final UserRepository userRepository,
+            final PasswordEncoder passwordEncoder,
+            final AuthenticationManager authenticationManager,
+            final JwtService jwtService,
+            final AclService aclService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

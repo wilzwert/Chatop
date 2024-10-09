@@ -4,7 +4,6 @@ import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.repository.RentalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +23,9 @@ public class DbRentalService implements RentalService {
     private final AclService aclService;
 
     public DbRentalService(
-            @Autowired final RentalRepository rentalRepository,
-            @Autowired final StorageService storageService,
-            @Autowired final AclService aclService) {
+            final RentalRepository rentalRepository,
+            final StorageService storageService,
+            final AclService aclService) {
         this.rentalRepository = rentalRepository;
         this.storageService = storageService;
         this.aclService = aclService;

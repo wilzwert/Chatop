@@ -11,7 +11,6 @@ import java.nio.file.StandardCopyOption;
 import com.openclassrooms.chatop.configuration.StorageProperties;
 import com.openclassrooms.chatop.exceptions.StorageException;
 import com.openclassrooms.chatop.exceptions.StorageFileNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
-    @Autowired
     public FileSystemStorageService(StorageProperties properties) {
 
         if(properties.getUploadDir().trim().isEmpty()){
