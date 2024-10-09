@@ -7,9 +7,18 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Open API configuration : authentication type, contact, API title and license
+ * This will be available at the Open API doc endpoint
+ * ( for more information on this endpoint path,
+ * see springdoc.api-docs.path in application.properties,
+ * handled by SPRINGDOC_API_DOCS_PATH in .env )
+ */
 @Configuration
 @SecurityScheme(
         name = "Bearer Authentication",

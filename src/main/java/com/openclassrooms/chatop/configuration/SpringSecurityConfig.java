@@ -16,22 +16,34 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Security configuration
+ * Exposes
+ * - default authentication provider and manager
+ * - password encoder and decoder
+ * Adds a custom filter to the security filter chain
+ * to handle Bearer token if provided in request
+ */
 @Configuration
 public class SpringSecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final StorageProperties storageProperties;
+    private final ApiDocProperties apiDocProperties;
 
     public SpringSecurityConfig(
-            @Autowired CustomUserDetailsService userDetailsService,
-            @Autowired JwtAuthenticationFilter jwtAuthenticationFilter,
-            @Autowired StorageProperties storageProperties
+            CustomUserDetailsService userDetailsService,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            StorageProperties storageProperties,
+            ApiDocProperties apiDocProperties
 
     ) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.storageProperties = storageProperties;
+        this.apiDocProperties = apiDocProperties;
     }
 
     @Bean
@@ -40,18 +52,22 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
+                        // allow publicly accessible paths
                     auth.requestMatchers(
                             "/api/auth/register",
                             "/api/auth/login",
                             "/"+storageProperties.getUploadDir()+"/**",
-                            "/v3/api-docs",
-                            "/v3/api-docs/",
-                            "/v3/api-docs/**",
+                            apiDocProperties.getApiDocsPath()+"/**",
+                            apiDocProperties.getSwaggerPath()+"/**",
+                            // note : we have to add /swagger-ui/** because event if swagger path is set in configuration
+                            // the ui is redirected to /swagger-ui/index.html
                             "/swagger-ui/**"
                         ).permitAll()
+                        // everything else requires authentication
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
+                // insert our custom filter, which will authenticate user from token if provided in the request
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
