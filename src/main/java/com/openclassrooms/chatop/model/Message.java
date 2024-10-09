@@ -1,6 +1,5 @@
 package com.openclassrooms.chatop.model;
 
-import com.openclassrooms.chatop.listener.RentalListener;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -59,7 +58,7 @@ public class Message {
     @Override
     public String toString() {
         return "Message [id=" + id + ", message=" + message + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "],"
-            +" Owner [id=" + user.getId()+", email=" + user.getEmail()+" ],"
-            +" Rental [id=" + rental.getId() + ", name="+rental.getName()+" ]";
+            +(user != null ? " Owner [id=" + user.getId()+", email=" + user.getEmail()+" ]," : " Owner unknown,")
+            +(rental != null ? " Rental [id=" + rental.getId() + ", name="+rental.getName()+" ]" : "Rental unknown");
     }
 }
