@@ -21,6 +21,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Custom Jwt filter, added to security filter chain in SpringSecurityConfig
+ * The goal here is to intercept a bearer token if present in the request
+ * and use it to authenticate the current user
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,16 +34,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     public JwtAuthenticationFilter(
-            @Autowired final CustomUserDetailsService customUserDetailsService,
-            @Autowired final JwtService jwtService
+            final CustomUserDetailsService customUserDetailsService,
+            final JwtService jwtService
     ) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtService = jwtService;
     }
 
+    /**
+     * Try to get, decode a Bearer token if it is set in the request, and set current context authentication accordingly
+     * @param request - the http request {@link HttpServletRequest}
+     * @param response - the current {@link HttpServletResponse} http response
+     * @param filterChain - the security filter chain
+     * @throws ServletException - throws {@link ServletException}
+     * @throws IOException - throws {@link IOException}
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // bypass filter if path whitelisted
+        // bypass filter if path should remain publicly accessible
         String path = request.getServletPath();
         if(path.matches("/api/auth/(login|register)")) {
             filterChain.doFilter(request, response);
@@ -46,11 +60,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             Optional<JwtToken> token = jwtService.extractTokenFromRequest(request);
+            // if not token found, security filter chain continues
             if(token.isEmpty()) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
+            // extract JWT Token and included email and try to authenticate the user
             JwtToken jwtToken = token.get();
             String userEmail = jwtToken.getClaims().getSubject();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -63,10 +79,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // pass authentication to the security context
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+            // security filter chain continues
             filterChain.doFilter(request, response);
         }
+        // send appropriate http status code and messages to request response
         catch(MalformedJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print("malformed token");
@@ -74,10 +93,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         catch(ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print("invalid_token");
-        }/*
-        catch(Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().print("Authentication failed"+e.getMessage());
-        }*/
+        }
     }
 }

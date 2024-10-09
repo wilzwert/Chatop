@@ -127,8 +127,16 @@ ng serve
 > POST /api/message : create a message
 
 ### API documentation
-Once the application is started, you should be able to access the API Documentation (please adjust host and port to your environment) :
+Once the application is started, you should be able to access the API Documentation (please adjust host and port to your environment).
 > http://localhost:8080/swagger-ui/index.html
+
+If you set a custom SWAGGER_PATH in .env, for example 
+> SWAGGER_PATH=/api-doc
+
+You can also access Swagger UI on
+> http://localhost:8080/api-doc
+
+Please note that event if you did set a custom Swagger path, you will be redirected to /swagger-ui/index.html
 
 ## Security
 - JWT Token authentication

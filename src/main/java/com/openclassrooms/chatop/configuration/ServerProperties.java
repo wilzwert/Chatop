@@ -4,6 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Server configuration properties
+ * Used for application configuration (binding port)
+ * and to generate URLs to uploaded images
+ */
 @ConfigurationProperties(prefix = "server")
 @Getter
 @Setter

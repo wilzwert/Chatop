@@ -21,6 +21,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.sql.DataSource;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * ACL configuration
+ * Expose beans used to handle acls
+ */
 @Configuration
 @EnableCaching
 @EnableMethodSecurity( prePostEnabled = true, securedEnabled = true)
@@ -40,7 +45,7 @@ public class AclMethodSecurityConfiguration  {
         LookupStrategy lookupStrategy = new BasicLookupStrategy(dataSource, aclCache(), aclAuthorizationStrategy(), new ConsoleAuditLogger());
         JdbcMutableAclService jdbcMutableAclService = new JdbcMutableAclService(dataSource, lookupStrategy, aclCache());
 
-        // For MySQL ONLY
+        // This is required for MySQL and MariaDB ONLY
         jdbcMutableAclService.setClassIdentityQuery("SELECT @@IDENTITY");
         jdbcMutableAclService.setSidIdentityQuery("SELECT @@IDENTITY");
 

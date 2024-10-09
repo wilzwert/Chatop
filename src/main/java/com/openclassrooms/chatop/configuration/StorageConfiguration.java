@@ -6,17 +6,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * @author Wilhelm Zwertvaegher
+ * Configuration for uploaded files handling
+ */
 @Configuration
 @Getter
 public class StorageConfiguration implements WebMvcConfigurer {
 
     private final StorageProperties storageProperties;
 
-    public StorageConfiguration(@Autowired StorageProperties storageProperties) {
+    public StorageConfiguration(StorageProperties storageProperties) {
         this.storageProperties = storageProperties;
     }
 
-    // set resource handler for uploaded files
+    /**
+     *  Set resource handler for uploaded files
+     * @param registry the RessourceHandlerRegistry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/"+storageProperties.getUploadDir()+"/**")
