@@ -9,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,7 @@ import java.util.Optional;
  * and use it to authenticate the current user
  */
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -53,6 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // bypass filter if path should remain publicly accessible
         String path = request.getServletPath();
         if(path.matches("/api/auth/(login|register)")) {
+            log.info("Path should remain publicly accessible, no need to handle Bearer token");
             filterChain.doFilter(request, response);
             return;
         }
@@ -61,6 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Optional<JwtToken> token = jwtService.extractTokenFromRequest(request);
             // if not token found, security filter chain continues
             if(token.isEmpty()) {
+                log.info("Token is empty");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -79,6 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // pass authentication to the security context
+                log.info("Token handled, set security context authentication");
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
             // security filter chain continues
@@ -86,10 +91,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         // send appropriate http status code and messages to request response
         catch(MalformedJwtException e) {
+            log.warn("Malformed token");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print("malformed token");
         }
         catch(ExpiredJwtException e) {
+            log.warn("Expired token");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print("invalid_token");
         }
