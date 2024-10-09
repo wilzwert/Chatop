@@ -57,6 +57,6 @@ public class Rental {
     public String toString() {
         return "Rental [id=" + id + ", name=" + name + ", createdAd=" + createdAt+", updatedAt=" + updatedAt+"],"
                 + "Owner [id=" + owner.getId() + "email=" +owner.getEmail() + "],"
-                +" messagesCount=" + messages.size();
+                +" messagesCount=" + (messages != null ? messages.size() : 0);
     }
 }
