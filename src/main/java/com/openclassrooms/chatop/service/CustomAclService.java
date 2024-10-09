@@ -3,8 +3,7 @@ package com.openclassrooms.chatop.service;
 import com.openclassrooms.chatop.model.Rental;
 import com.openclassrooms.chatop.model.User;
 import jakarta.transaction.Transactional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
@@ -20,11 +19,10 @@ import java.util.List;
  * @author Wilhelm Zwertvaegher
  */
 @Service
+@Slf4j
 public class CustomAclService implements AclService {
 
     private final CustomAclPermissionService customAclPermissionService;
-
-    private static final Logger logger = LogManager.getLogger(CustomAclService.class);
 
     private static final String DELETE_SID = "DELETE FROM acl_sid WHERE sid = ?";
 
@@ -42,14 +40,14 @@ public class CustomAclService implements AclService {
     }
 
     public void grantOwnerPermissions(Rental rental) {
-        logger.info("Creating owner acl for rental {}", rental.getId());
+        log.info("Creating owner acl for rental {}", rental.getId());
         try {
             ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
             List<Sid> sids = getContextSid();
             customAclPermissionService.grantOwnerPermissions(oid, sids);
         }
         catch(Exception e) {
-            logger.error("Error creating owner acl for rental {}", rental.getId(), e);
+            log.error("Error creating owner acl for rental {}", rental.getId(), e);
         }
     }
 
@@ -57,10 +55,10 @@ public class CustomAclService implements AclService {
     @Override
     @Transactional
     public void removeAllPermissions(Rental rental) {
-        logger.info("Removing all permissions for rental {}", rental.getId());
+        log.info("Removing all permissions for rental {}", rental.getId());
         ObjectIdentity oid = new ObjectIdentityImpl(Rental.class, rental.getId());
         customAclPermissionService.removeAllPermissions(oid);
-        logger.info("All permissions removed.");
+        log.info("All permissions removed.");
     }
 
     @Override
@@ -71,7 +69,7 @@ public class CustomAclService implements AclService {
         // lister les objets pour lesquels l'utilisateur a des permissions
         List<ObjectIdentity> objectIdentities = jdbcTemplate.query(SELECT_OBJECT_IDENTITIES_FOR_SID,
                 (row, rowNum) -> {
-                    logger.info("Remove all permissions : genereate OID with {}", row);
+                    log.info("Remove all permissions : genereate OID with {}", row);
                     return new ObjectIdentityImpl(
                             row.getString("class"),
                             row.getLong("acl_object_identity")
@@ -84,7 +82,7 @@ public class CustomAclService implements AclService {
             try {
                 customAclPermissionService.removeAllPermissions(objectIdentities, sid);
             } catch (Exception e) {
-                logger.error("Remove all permissions : error encountered {}", e.getMessage());
+                log.error("Remove all permissions : error encountered {}", e.getMessage());
             }
         }
     }
@@ -94,10 +92,10 @@ public class CustomAclService implements AclService {
         removeAllPermissions(user);
         PrincipalSid sid = new PrincipalSid(user.getEmail());
         try {
-            logger.info("Remove user  : deleting sid");
+            log.info("Remove user  : deleting sid");
             jdbcTemplate.update(DELETE_SID, sid.getPrincipal());
         } catch (DataAccessException e) {
-            logger.error("Remove user  :error encountered while deleting sid {}", e.getMessage());
+            log.error("Remove user  :error encountered while deleting sid {}", e.getMessage());
         }
     }
 
