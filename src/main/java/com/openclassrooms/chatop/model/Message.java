@@ -51,4 +51,15 @@ public class Message {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @Nullable
     private Rental rental;
+
+    /**
+     * Override toString method to avoid never ending loops on Rental::toString or User::toString
+     * @return String the string representation of this Message
+     */
+    @Override
+    public String toString() {
+        return "Message [id=" + id + ", message=" + message + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "],"
+            +" Owner [id=" + user.getId()+", email=" + user.getEmail()+" ],"
+            +" Rental [id=" + rental.getId() + ", name="+rental.getName()+" ]";
+    }
 }

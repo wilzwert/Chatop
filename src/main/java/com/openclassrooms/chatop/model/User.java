@@ -46,4 +46,14 @@ public class User {
     // let db handle cascade deletion
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private List<Message> messages;
+
+    /**
+     * Override toString method to avoid never ending loops on Message::toString or Rental::toString
+     * @return String the string representation of this User
+     */
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", email=" + email + ", name=" + name + ", createdAd=" + createdAt+", updatedAt=" + updatedAt+"],"
+                + "rentalsCount=" + rentals.size() + ", messagesCount=" + messages.size();
+    }
 }

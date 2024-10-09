@@ -48,4 +48,15 @@ public class Rental {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "rental")
     private List<Message> messages;
+
+    /**
+     * Override toString method to avoid never ending loops on User::toString or Message::toString
+     * @return String the string representation of this Rental
+     */
+    @Override
+    public String toString() {
+        return "Rental [id=" + id + ", name=" + name + ", createdAd=" + createdAt+", updatedAt=" + updatedAt+"],"
+                + "Owner [id=" + owner.getId() + "email=" +owner.getEmail() + "],"
+                +" messagesCount=" + messages.size();
+    }
 }
