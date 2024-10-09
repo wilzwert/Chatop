@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,7 @@ import java.util.Optional;
  * Rest controller for auth and user related endpoints
  */
 @RestController
+@Slf4j
 @RequestMapping("/api/auth")
 @Tag(name = "User", description = "User operations")
 @ApiResponses({
@@ -58,13 +60,16 @@ public class UserController {
             })
     })
     public JwtTokenDto register(@Valid @RequestBody final RegisterUserDto registerUserDto) {
+        log.info("Register user with email {}", registerUserDto.getEmail());
         User registerUser = userMapper.registerUserDtoToUser(registerUserDto);
         try {
             User user = userService.registerUser(registerUser);
             String token = userService.generateToken(user);
+            log.info("User with email {} registered with id {}", registerUserDto.getEmail(), user.getId());
             return new JwtTokenDto(token);
         }
         catch (EntityExistsException e) {
+            log.warn("Email {} already exists", registerUserDto.getEmail());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
     }
@@ -80,12 +85,15 @@ public class UserController {
             })
     })
     public JwtTokenDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        log.info("User login with email {}", loginRequestDto.getEmail());
         try {
-            User user = userService.authenticateUser(loginRequestDto.getLogin(), loginRequestDto.getPassword());
+            User user = userService.authenticateUser(loginRequestDto.getEmail(), loginRequestDto.getPassword());
             String token = userService.generateToken(user);
+            log.info("User with email {} successfully authenticated, sending JWT token", loginRequestDto.getEmail());
             return new JwtTokenDto(token);
         }
         catch (AuthenticationException e) {
+            log.info("Login failed for User with email {}", loginRequestDto.getEmail());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login failed."+e.getMessage());
         }
     }
@@ -100,10 +108,13 @@ public class UserController {
             })
     })
     public UserDto getUserInfo(Principal principal) {
+        log.info("Get current User info, email is {}", principal.getName());
         Optional<User> foundUser = userService.findUserByEmail(principal.getName());
         if(foundUser.isEmpty()) {
+            log.warn("No User found for email {}", principal.getName());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
+        log.info("User found for email {}, sending DTO", foundUser.get().getEmail());
         return userMapper.userToUserDTO(foundUser.get());
     }
 
@@ -120,10 +131,13 @@ public class UserController {
             })
     })
     public UserDto getUser(@PathVariable long id) {
+        log.info("Get User by id {}", id);
         Optional<User> foundUser = userService.findUserById(id);
         if(foundUser.isEmpty()) {
+            log.warn("No User found for id {}", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
+        log.info("User found with id {}, sending DTO", foundUser.get().getId());
         return userMapper.userToUserDTO(foundUser.get());
     }
 
@@ -133,10 +147,13 @@ public class UserController {
     @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCurrentUser(Principal principal) {
+        log.info("Delete current User, email is {}", principal.getName());
         Optional<User> foundUser = userService.findUserByEmail(principal.getName());
         if(foundUser.isEmpty()) {
+            log.warn("Delete current User failed: no user found for email {}", principal.getName());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         userService.deleteUser(foundUser.get());
+        log.info("Current User deleted with email {}", foundUser.get().getEmail());
     }
 }

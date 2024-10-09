@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,6 +34,7 @@ import java.util.Optional;
  * Rest controller for rentals related endpoints
  */
 @RestController
+@Slf4j
 @RequestMapping("/api/rentals")
 @Tag(name = "Rentals", description = "List, create or update rentals")
 @ApiResponses({
@@ -66,9 +68,11 @@ public class RentalController {
     })
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalsDto getAllRentals() {
+        log.info("Get all rentals...");
         List<Rental> rentals = rentalService.findAllRentals();
         List<RentalDto> rentalDtos = new ArrayList<>();
         rentals.stream().map(rentalMapper::rentalToRentalDto).forEach(rentalDtos::add);
+        log.info("{}, rentals sent", rentalDtos.size());
         return new RentalsDto(rentalDtos);
     }
 
@@ -85,8 +89,10 @@ public class RentalController {
     })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalDto getRental(@PathVariable @Parameter(name = "id", description = "Rental id", example = "1") int id) {
+        log.info("Get rentals with id {}", id);
         Optional<Rental> foundRental = rentalService.findRentalById(id);
         if(foundRental.isEmpty()) {
+            log.info("Rental not found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found");
         }
         return rentalMapper.rentalToRentalDto(foundRental.get());
@@ -101,17 +107,21 @@ public class RentalController {
     })
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public RentalResponseDto createRental(@Valid @ModelAttribute CreateRentalRequestDto createRentalDto, Principal principal) {
+        log.info("Create a rental");
         try {
             Optional<User> foundUser = userService.findUserByEmail(principal.getName());
             if(foundUser.isEmpty()) {
+                log.warn("Create a rental : couldn't get user info");
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
             }
             Rental createRental = rentalMapper.rentalRequestDtoToRental(createRentalDto);
             createRental.setOwner(foundUser.get());
             Rental rental = rentalService.createRental(createRental, createRentalDto.getPicture());
+            log.info("Rental created : {}", rental);
             return new RentalResponseDto("Rental "+rental.getName()+" created !");
         }
         catch(Exception e) {
+            log.error("Create a rental: rental could not be created", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Rental could not be created");
         }
     }
@@ -126,13 +136,16 @@ public class RentalController {
     @PutMapping(value ="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasPermission(#id, 'com.openclassrooms.chatop.model.Rental', 'WRITE')")
     public RentalResponseDto updateRental(@PathVariable int id, @Valid UpdateRentalRequestDto updateRentalDto) {
+        log.info("Update rental with id {}", id);
         try {
             Rental updateRental = rentalMapper.rentalRequestDtoToRental(updateRentalDto);
             updateRental.setId(id);
             Rental updatedRental = rentalService.updateRental(updateRental, updateRentalDto.getPicture());
+            log.info("Rental with id {} updated", id);
             return new RentalResponseDto("Rental "+updatedRental.getName()+" updated !");
         }
         catch(EntityNotFoundException e) {
+            log.warn("Update rental with id {} : not found", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found");
         }
     }
@@ -151,10 +164,13 @@ public class RentalController {
     @PreAuthorize("hasPermission(#id, 'com.openclassrooms.chatop.model.Rental', 'DELETE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRental(@PathVariable @Parameter(name = "id", description = "Rental id", example = "1") int id) {
+        log.info("Delete rental with id {}", id);
         Optional<Rental> foundRental = rentalService.findRentalById(id);
         if(foundRental.isEmpty()) {
+            log.warn("Delete rental with id {} : not found", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental not found");
         }
         rentalService.deleteRental(foundRental.get());
+        log.info("Rental with id {} deleted", id);
     }
 }

@@ -18,9 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +31,7 @@ import java.util.Optional;
  * Rest controller for messages related endpoints
  */
 @RestController
+@Slf4j
 @RequestMapping("/api/messages")
 @Tag(name = "Messages", description = "Create messages")
 @ApiResponses({
@@ -52,13 +51,11 @@ public class MessageController {
 
     private final MessageMapper messageMapper;
 
-    private final Logger logger = LoggerFactory.getLogger(MessageController.class);
-
     public MessageController(
-            @Autowired MessageService messageService,
-            @Autowired UserService userService,
-            @Autowired RentalService rentalService,
-            @Autowired MessageMapper messageMapper) {
+            MessageService messageService,
+            UserService userService,
+            RentalService rentalService,
+            MessageMapper messageMapper) {
         this.messageService = messageService;
         this.userService = userService;
         this.rentalService = rentalService;
@@ -74,22 +71,22 @@ public class MessageController {
     })
     @PostMapping("/")
     public MessageResponseDto createMessage(@Valid @RequestBody CreateMessageRequestDto createMessageRequestDto, Principal principal) {
-        logger.info("Create a message");
+        log.info("Create a message");
 
         Optional<User> foundUser = userService.findUserByEmail(principal.getName());
         if(foundUser.isEmpty()) {
-            logger.warn("Create a message : couldn't get user info");
+            log.warn("Create a message : couldn't get user info");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
         }
 
         if(createMessageRequestDto.getUserId() != foundUser.get().getId()) {
-            logger.warn("Create a message : request user id does not match current user info");
+            log.warn("Create a message : request user id does not match current user info");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get user info");
         }
 
         Optional<Rental> foundRental = rentalService.findRentalById(createMessageRequestDto.getRentalId());
         if(foundRental.isEmpty()) {
-            logger.warn("Create a message : couldn't find rental "+createMessageRequestDto.getRentalId());
+            log.warn("Create a message : couldn't find rental {}", createMessageRequestDto.getRentalId());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot get rental info");
         }
 
@@ -98,10 +95,10 @@ public class MessageController {
             createMessage.setUser(foundUser.get());
             createMessage.setRental(foundRental.get());
             Message message = messageService.createMessage(createMessage);
-            logger.info("Message {} created", message);
+            log.info("Message created : {}", message);
         }
         catch(Exception e) {
-            logger.error("Create a message : message could not be created", e);
+            log.error("Create a message : message could not be created", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Message could not be created"+e.getMessage());
         }
 
