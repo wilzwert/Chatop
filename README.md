@@ -80,7 +80,7 @@ This will make the application available on the host name and port you chose whi
 Import the collection in Postman : https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman
 
 You can set host and port as collection variables _apiHost_ and _apiPort_, respectively,  by selecting the variables set on ChatopAPI root and editing them. 
-Note that apiHost defaults to localhost and apiPort to 8080, as seen in env.examble.
+Note that apiHost defaults to localhost and apiPort to 8080, as seen in .env.example.
 
 Then run it. 
 In case you encounter issues with files to upload, please set files manually for these requests :
