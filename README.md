@@ -19,20 +19,7 @@ git clone https://github.com/wilzwert/Chatop.git
 cd Chatop
 ```
 
-2. Install dependencies
-Windows : 
-``` bash
-./mvnw clean install
-```
-
-Linux / unix :
-``` bash
-mvn clean install
-```
-
-Or directly in your favorite IDE
-
-3. Configuration
+2. Configuration
 
 This application uses a .env file to configure most of its parameters.
 Please copy the provided .env.example file to .env
@@ -50,7 +37,7 @@ copy .env.example .env
 Then setup variables according to your environment ; see .env.example for more information.
 Please note that there is a slight difference whether you're using MySQL or MariaDB, although default values should work for both.
 
-3. Create the database and import the schema provided in ressources/db_structure.sql
+3. Import the schema provided in resources/db_structure.sql into your database
 
 You can either use a GUI like PhpMyAdmin or load the file from command line :
 
@@ -58,10 +45,31 @@ You can either use a GUI like PhpMyAdmin or load the file from command line :
  mysql -u user -p database_name < ressources/db_structure.sql
  ```
 
+4. Install dependencies 
+
+Windows : 
+``` bash
+mvnw clean install
+```
+
+Linux / unix :
+``` bash
+mvn clean install
+```
+
+Or directly in your favorite IDE
+
+
 # Start the application
 
+Windows :
 ``` bash 
-./mvn spring-boot:run
+mvnw spring-boot:run
+```
+
+Linux / unix :
+``` bash 
+mvn spring-boot:run
 ```
 
 This will make the application available on the host name and port you chose while configuring. See .env.example for more information.
