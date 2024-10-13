@@ -82,11 +82,12 @@ Import the collection in Postman : https://learning.postman.com/docs/getting-sta
 You can set host and port as collection variables _apiHost_ and _apiPort_, respectively,  by selecting the variables set on ChatopAPI root and editing them. 
 Note that apiHost defaults to localhost and apiPort to 8080, as seen in .env.example.
 
-Then run it. 
-In case you encounter issues with files to upload, please set files manually for these requests :
-- rentals/POST create
-- rentals/POST create2
-- rentals/PUT update
+To ensure picture upload works as expected, which is mandatory for the collection to run properly, please follow these steps :
+
+- add 2 pictures to you Postman working directory (go to File > Settings to see / set you working directory)
+- then manually set those pictures as file upload for, respectively, POST create and POST create2 requests
+
+Then run the collection.
 
 2. Use the "real" frontend provided by OpenClassrooms
 - requirements : NodeJS, npm, Angular CLI 14 ; see repository Readme for more information 
